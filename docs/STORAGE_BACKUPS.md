@@ -82,18 +82,42 @@ Never overwrite a healthy live stack before inspecting:
 - Do not restore LazyLibrarian, Beets, Bindery, Homepage, or Homarr.
 - NetBird backup is optional only if it is still useful; WireGuard is the current remote-access plan.
 
-## Planned disk allocations
+## Intended virtual-disk allocations
 
-| Workload | Planned allocation |
+### Mini PC
+
+| Workload | Intended allocation |
 |---|---:|
+| Mom VM | 64 GB |
+| OPNsense | 64 GB |
 | Home Assistant OS | 128 GB |
-| Game server VM | 300 GB |
-| Trevor Immich VM disk | 100 GB |
-| Trevor Immich NAS data | 600 GB |
-| Life Docker VM | 100 GB |
+| Local LLM VM | 100 GB |
+| Life-heavy VM | 100 GB |
+| Random/testing VM | 30 GB |
+| Game server VM | 200 GB |
+| Gus Immich VM | 40 GB |
+| Networking VM | 80 GB |
+| Pi-hole CT | 8 GB |
+| Uptime Kuma CT | 12 GB |
+| Raspberry Pi test VM | TBD |
+| **Total excluding test VM** | **826 GB** |
 
-Treat these as planning targets, not verified current disk sizes.
+### XPS
+
+| Workload | Intended allocation |
+|---|---:|
+| `xps-life` | 250 GB |
+| `xps-arr` | 200 GB |
+| `xps-media` | 200 GB |
+| **Total** | **650 GB** |
+
+The XPS allocations above supersede the older 100/120/100 GB plan. Recent `df -h /` output showed roughly 97 GB usable inside each XPS guest. Treat that as a guest partition/LVM/filesystem expansion issue until Proxmox confirms otherwise; it does not change the intended 250/200/200 GB allocations.
+
+Large data such as Immich photos, media libraries, Frigate recordings, and large backups should primarily live on NAS storage rather than filling VM boot disks.
 
 ## Future storage work
 
-After the entire service restoration is stable, redesign Jellyfin/media storage for better efficiency and resilience. ZFS is a candidate, but the final choice must account for the actual disks, NAS hardware, RAM, backup strategy, and migration downtime.
+- After service restoration, verify the Proxmox virtual-disk sizes for all three XPS VMs.
+- Expand the Ubuntu partition, LVM physical volume/logical volume, and filesystem as appropriate so each guest can use its full assigned disk.
+- Back up and inspect the exact block/LVM layout before running expansion commands.
+- After the entire service restoration is stable, redesign Jellyfin/media storage for better efficiency and resilience. ZFS is a candidate, but the final choice must account for the actual disks, NAS hardware, RAM, backup strategy, and migration downtime.
