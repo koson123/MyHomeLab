@@ -50,29 +50,34 @@ Intended workloads:
 
 ### Mini-PC planned layout
 
-| VM / area | Purpose | State |
-|---|---|---|
-| `mini-mom` | Paperless-ngx, Mom Immich, custom inventory app | Needs audit |
-| `mini-router` | OPNsense router/firewall | Known operating |
-| `mini-ha` | Home Assistant OS; 2 cores, 4 GB RAM, 128 GB disk planned | Known operating; audit |
-| `mini-llm` | Local assistant/LLM | Planned |
-| `mini-life-heavy` | Frigate, WorkAdventure, Nextcloud later | Planned |
-| `mini-random` | Gridfinity and experiments | Planned |
-| `mini-games` | Crafty Controller and game servers; 300 GB planned | Needs audit |
-| `mini-gus` | Friend/Gus Immich | Needs verification |
-| Networking area / VM 109 | Pi-hole, Uptime Kuma, VPN endpoint, NPM | Partly operating; audit |
+| VM / CT | Purpose | Intended disk | State |
+|---|---|---:|---|
+| VM 1 / `mini-mom` | Paperless-ngx, Mom Immich, custom inventory app | 64 GB | Needs audit |
+| VM 2 / `mini-router` | OPNsense router/firewall | 64 GB | Known operating |
+| VM 3 / `mini-ha` | Home Assistant OS | 128 GB | Known operating; audit |
+| `mini-llm` | Local assistant/LLM | 100 GB | Planned |
+| VM 4 / `mini-life-heavy` | Frigate, WorkAdventure, Nextcloud later | 100 GB | Planned |
+| VM 5 / `mini-random` | Gridfinity and experiments | 30 GB | Planned |
+| VM 6 / `mini-games` | Crafty Controller and game servers | 200 GB | Needs audit |
+| VM 7 / `mini-gus` | Friend/Gus Immich | 40 GB | Needs verification |
+| Networking VM | Nginx Proxy Manager and WireGuard | 80 GB | NPM operating; WireGuard planned |
+| DNS CT | Pi-hole | 8 GB | Known operating; audit |
+| Monitoring CT | Uptime Kuma | 12 GB | Needs verification |
+| VM 12 | Raspberry Pi OS testing | TBD | Not created/optional |
+
+Planned mini-PC allocation is 826 GB excluding VM 12. These are intended virtual-disk sizes and still need to be reconciled against the actual Proxmox configuration.
 
 Mom's VM is intentionally placed on the parent-network side/in front of OPNsense so Mom's NAS is easier to mount and her services remain portable.
 
 ### XPS layout
 
-| VM | Purpose | State |
-|---|---|---|
-| `xps-life` | Trevor Immich, Mealie, Actual; later lifestyle apps | Verified |
-| `xps-arr` | Download and media automation stack | Verified |
-| `xps-media` | Jellyfin, Audiobookshelf, Navidrome, Sheets, Komga | Verified except Komga |
-| `xps-net` | Earlier plan for Pi-hole, Uptime Kuma, VPN, NPM | Reconcile with current VM 109 |
-| `xps-pi-test` | Raspberry Pi OS testing | Optional/planned |
+| VM | Purpose | Intended virtual disk | State |
+|---|---|---:|---|
+| `xps-life` | Trevor Immich, Mealie, Actual; later lifestyle apps | 250 GB | Verified services; guest currently exposes about 97 GB usable |
+| `xps-arr` | Download and media automation stack | 200 GB | Verified services; guest currently exposes about 97 GB usable |
+| `xps-media` | Jellyfin, Audiobookshelf, Navidrome, Sheets, Komga | 200 GB | Verified except Komga; guest currently exposes about 97 GB usable |
+
+The XPS VMs were allocated 650 GB total in Proxmox. The roughly 97 GB filesystems observed inside each Ubuntu guest likely mean their partitions/LVM logical volumes/filesystems have not yet been expanded to consume the full virtual disks. Verify the Proxmox disk sizes first, then expand each guest safely after service restoration.
 
 ## Platform standards
 
