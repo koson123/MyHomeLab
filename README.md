@@ -13,7 +13,7 @@ The core XPS application VMs are online. The most recently verified stacks are:
 - `xps-media`: Jellyfin, Audiobookshelf, Navidrome, and Sheets
 - Network core known operating: OPNsense, Nginx Proxy Manager, Pi-hole, HomeLab Wi-Fi, public DNS, and HTTPS proxying
 
-The immediate next task is restoring/installing Komga on `xps-media), followed by a full audit of the mini-PC VMs and containers.
+The immediate next task is restoring/installing Komga on `xps-media`, followed by a full audit of the mini-PC VMs and containers.
 
 ## Documentation
 
