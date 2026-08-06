@@ -40,7 +40,7 @@ Jellyfin currently has both explicit application directories and legacy Docker v
 |---|---|---|
 | Mom Immich | `mini-mom` / VM 101 | Verified healthy; port 2283 |
 | Paperless-ngx | `mini-mom` / VM 101 | Verified healthy/running; port 8000 |
-| Mom inventory app | `mini-mom` / VM 101 | `/opt/mom/inventory` exists; no running container observed; verify deployment |
+| Mom inventory app | `mini-mom` / VM 101 | Not deployed: `/opt/mom/inventory` is empty (4 KiB), contains no app files, and no inventory container is running; locate/restore source or backup |
 | Gus/friend Immich | `mini-gus` | Dedicated VM not currently created |
 
 Mom's services and storage should stay grouped so they can be moved later. Gus's Immich must remain separate from Mom's.
