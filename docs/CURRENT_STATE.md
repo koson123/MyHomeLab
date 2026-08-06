@@ -1,6 +1,8 @@
 # Current State
 
-Last reconciled: 2026-08-06.
+Last documentation audit: 2026-08-06.
+
+The documents have been cross-checked against the command output currently available. This is a documentation audit, not a substitute for a new live audit of Proxmox, the mini-PC workloads, PBS, or service logins.
 
 This file separates confirmed reality from older plans.
 
@@ -84,6 +86,19 @@ Nginx Proxy Manager was recently reachable at `10.50.0.135:81`. That VM appeared
 - Crafty Controller and all game servers/worlds
 - Pi-hole persistence and upstream DNS configuration
 - Nginx Proxy Manager backups, certificates, and all proxy hosts
+
+## Verification boundary
+
+The current evidence directly verifies the three XPS application stacks and their observed mounts/status at the time shown. It does **not** yet verify:
+
+- Actual Proxmox virtual-disk sizes, VM IDs, CPU/RAM assignments, bridges, or autostart settings
+- Guest partition/LVM capacity beyond the observed approximately 97 GB root filesystems
+- Mini-PC VM/CT health and placement
+- PBS job recency and restoreability
+- Public-domain reachability for every service
+- Application-level data/login checks after a reboot
+
+These must remain open until live outputs are captured.
 
 ## Missing or planned
 
