@@ -1,7 +1,17 @@
 # Roadmap
 
-## Phase 1 — finish service restoration
+## Documentation audit — 2026-08-06
 
+- [x] Reconcile XPS service status against supplied `docker`/mount/storage output.
+- [x] Record corrected intended XPS allocations: 250 GB / 200 GB / 200 GB.
+- [x] Separate verified, known-operating, needs-verification, planned, and postponed states.
+- [x] Correct the Mealie incident record: working change was in Nginx Proxy Manager; DNS was an observation, not a proven root cause.
+- [ ] Capture fresh Proxmox and guest evidence for every remaining unverified claim.
+
+## Phase 1 — live inventory and finish service restoration
+
+- [ ] Export both Proxmox node inventories: VM/CT IDs, names, state, CPU, RAM, disks, bridges, and autostart.
+- [ ] Capture `lsblk`, LVM, filesystem, memory, mounts, Compose, and container health from all three XPS guests.
 - [ ] Temporarily mount the backup NAS on `xps-media`.
 - [ ] Search the `xps-media` backup for Komga.
 - [ ] Restore or install Komga without touching the four healthy media services.
