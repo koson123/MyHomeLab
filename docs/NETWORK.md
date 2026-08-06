@@ -86,9 +86,11 @@ Two VPN purposes must not be confused:
 
 WireGuard remote access does not hide qBittorrent's public IP.
 
-## DNS issue to fix
+## DNS observations and follow-up
 
-A HomeLab client received ISP IPv6 DNS `2605:5480:1f:160::1`, which returned stale/incorrect results for a new hostname while Cloudflare `1.1.1.1` resolved it correctly. Configure OPNsense/Pi-hole DHCP and router advertisements so clients receive reliable IPv4 and IPv6 DNS.
+A HomeLab client was observed using ISP IPv6 DNS `2605:5480:1f:160::1`. That resolver returned `NXDOMAIN` for Mealie during troubleshooting, while Cloudflare `1.1.1.1` resolved the hostname. However, Mealie began working only after Nginx Proxy Manager's **Block Common Exploits** and **WebSocket Support** options were disabled, so the incident must not be recorded as a proven DNS-caused outage.
+
+Still audit OPNsense/Pi-hole DHCP and IPv6 router-advertisement settings so the intended DNS resolver is distributed consistently. Record the actual resolver configuration before changing it.
 
 ## Wi-Fi
 
