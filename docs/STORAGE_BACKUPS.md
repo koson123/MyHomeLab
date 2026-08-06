@@ -55,6 +55,18 @@ sudo umount /mnt/server
 sudo rmdir /mnt/server
 ```
 
+### `mini-mom`
+
+Permanent Mom NAS mount:
+
+```text
+/mnt/moms-nas -> //192.168.40.147/main
+```
+
+Verified capacity: 11 TB total, 2.5 TB used, 8.0 TB available.
+
+The Proxmox virtual disk is 64 GB, but Ubuntu currently exposes a 31 GB root logical volume that is 87% full. Inspect and expand its LVM/filesystem before it runs out of space.
+
 ## Backup location observed
 
 ```text
