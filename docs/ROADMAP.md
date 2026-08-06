@@ -10,7 +10,7 @@
 
 ## Phase 1 — live inventory and finish service restoration
 
-- [ ] Export both Proxmox node inventories: VM/CT IDs, names, state, CPU, RAM, disks, bridges, and autostart.
+- [ ] Export both Proxmox node inventories: Mini-PC complete; XPS still required.
 - [ ] Capture `lsblk`, LVM, filesystem, memory, mounts, Compose, and container health from all three XPS guests.
 - [ ] Temporarily mount the backup NAS on `xps-media`.
 - [ ] Search the `xps-media` backup for Komga.
@@ -21,16 +21,20 @@
 
 ## Phase 2 — audit the mini-PC side
 
-- [ ] Inventory every mini-PC VM/CT, ID, IP, CPU, RAM, disk, network, and autostart setting.
+- [x] Inventory every existing mini-PC VM/CT, ID, IP, CPU, RAM, disk, network, and autostart setting.
 - [ ] Verify OPNsense configuration and backups.
 - [ ] Verify Nginx Proxy Manager, certificates, proxy hosts, and backup.
 - [ ] Verify Pi-hole, upstream resolvers, DHCP integration, and persistence.
 - [ ] Verify Uptime Kuma.
-- [ ] Verify Mom Immich, Paperless-ngx, and inventory app.
+- [ ] Mom Immich and Paperless-ngx verified; verify/deploy the inventory app.
 - [ ] Verify Home Assistant OS.
 - [ ] Verify Crafty Controller and every game world.
 - [ ] Verify Gus/friend Immich is separate from Mom's stack.
 - [ ] Verify Proxmox Backup Server and recent backup jobs.
+
+- [ ] Install and enable `qemu-guest-agent` in `mini-mom`.
+- [ ] Expand `mini-mom`'s 31 GB root LVM/filesystem to use the 64 GB virtual disk.
+- [ ] Detach stale installer ISOs from VMs after confirming normal disk boot.
 
 ## Phase 3 — reconcile VM storage
 
