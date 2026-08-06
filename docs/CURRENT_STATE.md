@@ -62,6 +62,34 @@ Host IP: `10.50.0.126`
 
 A temporary `/mnt/server` mount is not currently present. The credential file `/root/.nova-nas-credentials` exists and can be used to mount the backup NAS temporarily without exposing its contents.
 
+## Verified Mini-PC infrastructure
+
+### Proxmox host `pve-mini`
+
+Verified 2026-08-06:
+
+- Proxmox VE 9.2.4
+- AMD Ryzen 7 8845HS, 8 cores / 16 threads
+- 28 GiB usable RAM
+- 1 TB NVMe; approximately 794 GB in `local-lvm`
+- Management IP `192.168.40.67`; HomeLab-side IP `10.50.0.2`
+- Bridges: `vmbr0` parent network and `vmbr1` HomeLab network
+- Two-node cluster healthy and quorate
+- Only about 2.4 GiB RAM available with current guests running; plan RAM before adding more VMs
+
+### `mini-mom` / VM 101
+
+Host IP: `192.168.40.252` on parent network `vmbr0`.
+
+- Ubuntu 24.04.4 LTS; 2 vCPU; 4 GB RAM; 64 GB Proxmox disk
+- Guest root filesystem currently uses only 31 GB of the 64 GB virtual disk and is 87% full (3.8 GB free)
+- Mom Immich: verified healthy, four-container stack, exposed on port 2283
+- Paperless-ngx: verified healthy/running, five-container stack, exposed on port 8000
+- Mom NAS: verified CIFS mount `//192.168.40.147/main` at `/mnt/moms-nas`; 11 TB total, 8.0 TB available
+- No exited/restarting containers and no failed systemd units
+- Inventory directory exists at `/opt/mom/inventory`, but no running inventory container was observed; deployment still needs verification
+- QEMU guest agent is not installed; Proxmox has `agent: 1`, but Ubuntu reports the service as not found
+
 ## Known operating, not fully audited in the current sweep
 
 - OPNsense router/firewall
@@ -77,9 +105,7 @@ Nginx Proxy Manager was recently reachable at `10.50.0.135:81`. That VM appeared
 
 ## Previously restored but needs verification
 
-- Mom's Immich
-- Paperless-ngx
-- Mom's custom inventory app
+- Mom's custom inventory app (directory exists, deployment not yet verified)
 - Uptime Kuma
 - Home Assistant OS
 - Gus's/friend's Immich and whether its dedicated VM exists
@@ -91,9 +117,8 @@ Nginx Proxy Manager was recently reachable at `10.50.0.135:81`. That VM appeared
 
 The current evidence directly verifies the three XPS application stacks and their observed mounts/status at the time shown. It does **not** yet verify:
 
-- Actual Proxmox virtual-disk sizes, VM IDs, CPU/RAM assignments, bridges, or autostart settings
 - Guest partition/LVM capacity beyond the observed approximately 97 GB root filesystems
-- Mini-PC VM/CT health and placement
+- Mini-PC application-level health beyond `mini-mom`
 - PBS job recency and restoreability
 - Public-domain reachability for every service
 - Application-level data/login checks after a reboot
