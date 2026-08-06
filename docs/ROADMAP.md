@@ -32,8 +32,8 @@
 - [ ] Verify Gus/friend Immich is separate from Mom's stack.
 - [ ] Verify Proxmox Backup Server and recent backup jobs.
 
-- [ ] Install and enable `qemu-guest-agent` in `mini-mom`.
-- [ ] Expand `mini-mom`'s 31 GB root LVM/filesystem to use the 64 GB virtual disk.
+- [x] Install `qemu-guest-agent` in `mini-mom` and verify the service is active; confirm Proxmox-side agent response next.
+- [x] Expand `mini-mom`'s root LVM/filesystem from approximately 31 GB to approximately 62 GB.
 - [ ] Detach stale installer ISOs from VMs after confirming normal disk boot.
 
 ## Phase 3 — reconcile VM storage
