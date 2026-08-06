@@ -22,7 +22,15 @@
 - [ ] Verify Gus/friend Immich is separate from Mom's stack.
 - [ ] Verify Proxmox Backup Server and recent backup jobs.
 
-## Phase 3 — make networking durable
+## Phase 3 — reconcile VM storage
+
+- [ ] Confirm Proxmox shows `xps-life` at 250 GB, `xps-arr` at 200 GB, and `xps-media` at 200 GB.
+- [ ] Inspect the partition, LVM, and filesystem layout inside each XPS guest.
+- [ ] Back up each VM before changing its storage layout.
+- [ ] Expand each guest from roughly 97 GB usable to its full assigned virtual disk.
+- [ ] Confirm services and mounts still work after expansion and reboot.
+
+## Phase 4 — make networking durable
 
 - [ ] Assign DHCP reservations/static addresses to infrastructure.
 - [ ] Correct IPv4 and IPv6 DNS distribution to clients.
@@ -32,7 +40,7 @@
 - [ ] Confirm public services remain reachable and HTTPS certificates renew.
 - [ ] Document firewall, NAT, DNS, and port-forward rules.
 
-## Phase 4 — monitoring and backups
+## Phase 5 — monitoring and backups
 
 - [ ] Add every VM, NAS, service, domain, and certificate to Uptime Kuma.
 - [ ] Configure weekly PBS backups.
@@ -40,7 +48,7 @@
 - [ ] Perform sample restore tests.
 - [ ] Document recovery time and dependencies for each critical service.
 
-## Phase 5 — planned applications
+## Phase 6 — planned applications
 
 - [ ] Vaultwarden
 - [ ] LibreCloset
@@ -53,7 +61,7 @@
 - [ ] Gridfinity/random project stack
 - [ ] Nextcloud later
 
-## Phase 6 — later infrastructure improvements
+## Phase 7 — later infrastructure improvements
 
 - [ ] Select an outbound commercial VPN before enabling Gluetun.
 - [ ] Route only qBittorrent through Gluetun; keep ARR UIs locally reachable.
