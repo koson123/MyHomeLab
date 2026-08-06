@@ -6,6 +6,15 @@
 
 Primary compact Proxmox host. Purchased with included RAM and SSD.
 
+Verified host facts (2026-08-06):
+
+- Hostname: `pve-mini`
+- Proxmox VE 9.2.4
+- AMD Ryzen 7 8845HS, 8 cores / 16 threads
+- 28 GiB usable RAM
+- 1 TB NVMe; approximately 794 GB in `local-lvm`
+- Two-node Proxmox cluster, healthy and quorate
+
 Intended workloads:
 
 - OPNsense
@@ -52,20 +61,20 @@ Intended workloads:
 
 | VM / CT | Purpose | Intended disk | State |
 |---|---|---:|---|
-| VM 1 / `mini-mom` | Paperless-ngx, Mom Immich, custom inventory app | 64 GB | Needs audit |
-| VM 2 / `mini-router` | OPNsense router/firewall | 64 GB | Known operating |
-| VM 3 / `mini-ha` | Home Assistant OS | 128 GB | Known operating; audit |
+| VM 101 / `mini-mom` | Paperless-ngx, Mom Immich, custom inventory app | 64 GB | Running; Immich/Paperless verified; inventory app unverified |
+| VM 102 / `mini-router` | OPNsense router/firewall | 64 GB | Running; 2 vCPU / 4 GB RAM; dual bridge; starts first |
+| VM 103 / `mini-ha` | Home Assistant OS | 128 GB | Running; 2 vCPU / 4 GB RAM; `10.50.0.159` |
 | `mini-llm` | Local assistant/LLM | 100 GB | Planned |
 | VM 4 / `mini-life-heavy` | Frigate, WorkAdventure, Nextcloud later | 100 GB | Planned |
 | VM 5 / `mini-random` | Gridfinity and experiments | 30 GB | Planned |
-| VM 6 / `mini-games` | Crafty Controller and game servers | 200 GB | Needs audit |
-| VM 7 / `mini-gus` | Friend/Gus Immich | 40 GB | Needs verification |
-| Networking VM | Nginx Proxy Manager and WireGuard | 80 GB | NPM operating; WireGuard planned |
-| DNS CT | Pi-hole | 8 GB | Known operating; audit |
-| Monitoring CT | Uptime Kuma | 12 GB | Needs verification |
+| VM 107 / `mini-games` | Crafty Controller and game servers | 200 GB | Running; 4 vCPU / 10 GB RAM; `10.50.0.118`; app audit pending |
+| VM 7 / `mini-gus` | Friend/Gus Immich | 40 GB | Not currently created |
+| VM 109 / `mini-networking` | Nginx Proxy Manager and WireGuard | 80 GB | Running; 2 vCPU / 4 GB RAM; `10.50.0.135` |
+| CT 110 / `mini-dns` | Pi-hole | 8 GB | Running; 1 vCPU / 512 MB; `10.50.0.134` |
+| CT 111 / `mini-monitoring` | Uptime Kuma | 12 GB | Running; 1 vCPU / 1 GB; `10.50.0.143`; app audit pending |
 | VM 12 | Raspberry Pi OS testing | TBD | Not created/optional |
 
-Planned mini-PC allocation is 826 GB excluding VM 12. These are intended virtual-disk sizes and still need to be reconciled against the actual Proxmox configuration.
+Planned mini-PC allocation is 826 GB excluding VM 12. The seven existing guests total 556 GB of virtual-disk allocations. The LLM, life-heavy, random, Gus, and Raspberry Pi test VMs are not currently created. With only about 2.4 GiB host RAM available during the audit, RAM must be planned before adding guests.
 
 Mom's VM is intentionally placed on the parent-network side/in front of OPNsense so Mom's NAS is easier to mount and her services remain portable.
 
