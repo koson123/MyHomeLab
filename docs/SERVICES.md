@@ -26,22 +26,22 @@ Jellyfin currently has both explicit application directories and legacy Docker v
 
 | Service | Intended host | State |
 |---|---|---|
-| OPNsense | Mini-PC router VM | Known operating |
-| Nginx Proxy Manager | Networking VM / VM 109 | Known operating |
-| Pi-hole | Networking area | Known operating; audit |
-| Uptime Kuma | Networking area | Needs verification |
+| OPNsense | `mini-router` / VM 102 | VM verified running; application/config audit pending |
+| Nginx Proxy Manager | `mini-networking` / VM 109 | VM and IP verified; application/config audit pending |
+| Pi-hole | `mini-dns` / CT 110 | CT and IP verified; application/config audit pending |
+| Uptime Kuma | `mini-monitoring` / CT 111 | CT and IP verified; application audit pending |
 | WireGuard | Networking area | Planned |
-| Home Assistant OS | `mini-ha` | Needs current audit |
+| Home Assistant OS | `mini-ha` / VM 103 | VM and IP verified; application audit pending |
 | Proxmox Backup Server | Old laptop | Needs current audit |
 
 ## Family/friend services
 
 | Service | Intended host | State |
 |---|---|---|
-| Mom Immich | `mini-mom` | Previously restored; verify |
-| Paperless-ngx | `mini-mom` | Previously restored; verify |
-| Mom inventory app | `mini-mom` | Needs verification |
-| Gus/friend Immich | `mini-gus` | Verify dedicated separation |
+| Mom Immich | `mini-mom` / VM 101 | Verified healthy; port 2283 |
+| Paperless-ngx | `mini-mom` / VM 101 | Verified healthy/running; port 8000 |
+| Mom inventory app | `mini-mom` / VM 101 | `/opt/mom/inventory` exists; no running container observed; verify deployment |
+| Gus/friend Immich | `mini-gus` | Dedicated VM not currently created |
 
 Mom's services and storage should stay grouped so they can be moved later. Gus's Immich must remain separate from Mom's.
 
