@@ -2,7 +2,7 @@
 
 This repository is the source of truth for Trevor Gardner's home server, network, services, storage, restoration progress, and future work.
 
-> Last reconciled: 2026-08-06 (America/Denver)
+> Last documentation audit: 2026-08-06 (America/Denver)
 
 ## Current headline
 
@@ -13,7 +13,7 @@ The core XPS application VMs are online. The most recently verified stacks are:
 - `xps-media`: Jellyfin, Audiobookshelf, Navidrome, and Sheets
 - Network core known operating: OPNsense, Nginx Proxy Manager, Pi-hole, HomeLab Wi-Fi, public DNS, and HTTPS proxying
 
-The immediate next task is restoring/installing Komga on `xps-media`, followed by a full audit of the mini-PC VMs and containers.
+The immediate next task is a live infrastructure audit, beginning with the Proxmox inventories and then restoring/installing Komga on `xps-media`. Documentation is internally reconciled, but items marked **Needs verification** are not considered confirmed until live command output is collected.
 
 ## Documentation
 
