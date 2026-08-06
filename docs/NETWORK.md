@@ -12,9 +12,16 @@
 
 | Address | Device/service | Confidence |
 |---|---|---|
+| `192.168.40.67` | `pve-mini` management address | Verified |
+| `192.168.40.252` | `mini-mom` / VM 101 | Verified |
+| `10.50.0.2` | `pve-mini` HomeLab-side address | Verified |
 | `10.50.0.113` | Jellyfin/media SMB share | Verified by mounts |
+| `10.50.0.118` | `mini-games` / VM 107 | Verified via guest agent |
 | `10.50.0.126` | `xps-media` | Verified |
-| `10.50.0.135` | Networking VM / Nginx Proxy Manager admin (`:81`) | Recently observed; DHCP |
+| `10.50.0.134` | `mini-dns` / CT 110 | Verified |
+| `10.50.0.135` | Networking VM / Nginx Proxy Manager admin (`:81`) | Verified VM address; DHCP |
+| `10.50.0.143` | `mini-monitoring` / CT 111 | Verified |
+| `10.50.0.159` | `mini-ha` / VM 103 | Verified via guest agent |
 | `10.50.0.152` | `xps-life` | Verified |
 | `192.168.40.147` | Mom/Nova NAS SMB `main` share | Verified by mounts |
 | `72.12.254.124` | Public address returned for `gardnergate.cc` subdomains | Observed 2026-08 |
