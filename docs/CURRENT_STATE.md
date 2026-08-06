@@ -82,13 +82,15 @@ Verified 2026-08-06:
 Host IP: `192.168.40.252` on parent network `vmbr0`.
 
 - Ubuntu 24.04.4 LTS; 2 vCPU; 4 GB RAM; 64 GB Proxmox disk
-- Guest root filesystem currently uses only 31 GB of the 64 GB virtual disk and is 87% full (3.8 GB free)
+- Guest root filesystem currently uses a 31 GB logical volume and is 87% full (3.8 GB free); the volume group has another 31 GB free, so no Proxmox disk enlargement is required
 - Mom Immich: verified healthy, four-container stack, exposed on port 2283
 - Paperless-ngx: verified healthy/running, five-container stack, exposed on port 8000
 - Mom NAS: verified CIFS mount `//192.168.40.147/main` at `/mnt/moms-nas`; 11 TB total, 8.0 TB available
 - No exited/restarting containers and no failed systemd units
-- Inventory directory exists at `/opt/mom/inventory`, but no running inventory container was observed; deployment still needs verification
+- `/opt/mom/inventory` is an empty 4 KiB directory with no application files, and no inventory container is running; the custom inventory app is not deployed and must be located/restored
 - QEMU guest agent is not installed; Proxmox has `agent: 1`, but Ubuntu reports the service as not found
+- Root usage is concentrated in `/var` (13 GB, primarily `/var/lib`) and `/opt` (5.5 GB); `/opt/mom/immich/postgres` uses 5.4 GB
+- Docker images account for substantial root usage; no build cache was present and the named model-cache volume used about 824 MB
 
 ## Known operating, not fully audited in the current sweep
 
