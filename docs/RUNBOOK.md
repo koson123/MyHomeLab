@@ -1,5 +1,34 @@
 # Runbook
 
+## Proxmox inventory check
+
+Run on each Proxmox node before changing VM allocations:
+
+```bash
+hostname
+pveversion
+pvesh get /cluster/resources --type vm --output-format json-pretty
+pvesm status
+ip -brief address
+ip -brief link
+```
+
+For each VM/CT, record its ID, name, running state, CPU, RAM, configured disks, network bridge, and startup policy. Do not treat a planned disk size as actual until Proxmox configuration confirms it.
+
+## Ubuntu storage-layout check
+
+Run inside each XPS guest before any disk expansion:
+
+```bash
+lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
+sudo pvs
+sudo vgs
+sudo lvs -a -o +devices
+df -hT
+```
+
+Back up the VM before resizing partitions, LVM, or filesystems.
+
 ## Basic VM health check
 
 ```bash
