@@ -65,7 +65,9 @@ Permanent Mom NAS mount:
 
 Verified capacity: 11 TB total, 2.5 TB used, 8.0 TB available.
 
-The Proxmox virtual disk is 64 GB, but Ubuntu currently exposes a 31 GB root logical volume that is 87% full. Inspect and expand its LVM/filesystem before it runs out of space.
+The Proxmox virtual disk and LVM physical volume are 64 GB/62 GB. Ubuntu's `ubuntu-vg` contains a 31 GB root logical volume plus 31 GB unallocated free extents. Root is 87% full, so the root LV/filesystem can be extended using existing volume-group space; no Proxmox disk enlargement or partition growth is required.
+
+Observed root-space concentration: `/var` 13 GB (primarily `/var/lib`) and `/opt` 5.5 GB, including 5.4 GB in `/opt/mom/immich/postgres`. Docker also stores several large application images plus an approximately 824 MB Immich model-cache volume; there was no build cache.
 
 ## Backup location observed
 
