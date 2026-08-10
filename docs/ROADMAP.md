@@ -46,7 +46,8 @@
 
 ## Phase 4 — make networking durable
 
-- [ ] Assign DHCP reservations/static addresses to infrastructure.
+- [ ] Give all permanent homelab infrastructure stable IP addresses later, using documented static assignments and/or DHCP reservations as appropriate; cover Proxmox hosts, VMs/CTs, NAS devices, Raspberry Pis, network infrastructure, and other long-lived servers/services.
+- [ ] Create and maintain a documented IP/address allocation map so new infrastructure does not conflict with existing assignments.
 - [ ] Correct IPv4 and IPv6 DNS distribution to clients.
 - [ ] Set up WireGuard remote access.
 - [ ] Test WireGuard from phone and laptop outside HomeLab Wi-Fi.
