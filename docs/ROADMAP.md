@@ -84,3 +84,22 @@
 - [ ] Finish OpenWrt wireless mesh and seamless roaming.
 - [ ] Explore local Bluetooth repeating through network nodes.
 - [ ] Improve offline/local operation for Home Assistant and PC control.
+
+## Phase 8 — centralized Infrastructure as Code and automation
+
+Implement this only after the homelab architecture, addressing, service placement, storage, and backup strategy are stable enough that automation will not be constantly rewritten.
+
+- [ ] Establish an Ansible control node for centralized homelab administration.
+- [ ] Keep inventories, playbooks, roles, templates, and non-secret configuration under Git version control.
+- [ ] Group managed systems by role, including Proxmox hosts, Mini-PC VMs/containers, XPS VMs, Raspberry Pis, networking/services, media, games, and experimental nodes.
+- [ ] Automate Linux package updates and routine maintenance across supported nodes.
+- [ ] Automate software/package deployment and baseline machine configuration.
+- [ ] Automate Docker/Compose deployment and controlled service restarts where appropriate.
+- [ ] Automate user accounts, SSH keys, sudo policy, and host-access configuration.
+- [ ] Automate repeatable firewall and network configuration where safe and supported.
+- [ ] Automate configuration backups and validation of expected machine state.
+- [ ] Integrate Proxmox API workflows for repeatable VM/CT provisioning and lifecycle actions where they provide an advantage over SSH-only automation.
+- [ ] Add dry-run/check-mode, staged rollouts, backups, and explicit safeguards before broad or destructive changes.
+- [ ] Build health checks and post-change verification so playbooks confirm services actually return to a healthy state.
+- [ ] Document one-command runbooks for common tasks such as `update all Linux nodes`, `deploy a service`, `rotate an SSH key`, and `restart a stack`.
+- [ ] Design the automation layer so the future Ecosystem AI can invoke approved playbooks through a constrained interface instead of receiving unrestricted shell/root access.
