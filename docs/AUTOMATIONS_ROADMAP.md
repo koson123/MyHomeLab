@@ -17,23 +17,53 @@ Build a local-first automation layer connecting Trevor's homelab, Immich, Home A
 
 ## Phase 1 — Personal daily automations
 
-### Morning motivation and guitar practice
+### Personal Morning Delivery Hub
 
-Status: Planned; originally requested August 6, 2026.
+Status: Planned; expanded August 16, 2026 from the original morning motivation and guitar-practice automation requested August 6, 2026.
+
+Goal: use the homelab as Trevor's personal morning launch system. It should help him wake up and get out of bed, provide the correct workout for that day, and deliver a short useful briefing without overwhelming him.
 
 Every morning, deliver:
 
-1. One motivational video selected from Trevor's designated Immich motivation location.
-2. One song to practice on guitar selected from Trevor's designated Immich guitar-practice location.
+1. The correct workout for that day based on Trevor's current training plan, weekly rotation, recovery needs, equipment, and recent completion history.
+2. One motivational video selected from Trevor's designated Immich motivation location.
+3. One song to practice on guitar selected from Trevor's designated Immich guitar-practice location.
+4. A concise morning information briefing containing only the modules Trevor approves.
+5. A wake-up sequence designed to help Trevor actually get out of bed; the exact mechanism still needs to be designed and tested.
 
-Requirements:
+Workout requirements:
+
+- Keep the active workout plan and weekly schedule in a structured source the server can read.
+- Select the planned hard workout, recovery session, or rest/recovery variant for the correct day.
+- Account for completed, missed, moved, or intentionally skipped sessions without silently doubling workouts.
+- Present the exercises, sets, reps, rest periods, and any relevant warm-up or mobility work clearly.
+- Allow Trevor to mark the workout started, completed, modified, skipped, or moved.
+- Preserve completion history so Jarvis can report consistency and help adjust future plans after Trevor approves changes.
+
+Wake-up assistance requirements:
+
+- Explore a staged local wake-up routine using approved devices such as phone notifications, speakers, lights, blinds, Home Assistant devices, or a physical confirmation action.
+- Begin gently, then escalate only through methods Trevor has explicitly enabled.
+- Detect acknowledgement and stop the sequence once Trevor is genuinely up rather than continuing unnecessarily.
+- Avoid unsafe, excessively disruptive, or impossible-to-disable behavior.
+- Keep a simple backup alarm independent from the homelab so a server outage cannot cause Trevor to oversleep.
+
+Morning briefing candidates:
+
+- Current time, date, weather, and only schedule information relevant to the morning.
+- Today's workout and first important responsibility.
+- A short scripture, spiritual prompt, or reminder to pray and study.
+- Important Home Assistant or homelab alerts that actually require Trevor's attention.
+- A concise progress or accountability reminder based on his approved goals.
+- Trevor will choose the final modules, ordering, delivery device, and maximum length before implementation.
+
+Motivation and guitar requirements:
 
 - Use the curated Immich collections as the authoritative source.
 - Track delivery history so items do not repeat too frequently.
 - Allow favorites, skips, difficulty, mood, and "show this again" feedback.
 - Prefer guitar songs appropriate to Trevor's current ability, then gradually increase difficulty.
 - If either collection is empty, report that clearly instead of substituting unreviewed internet content.
-- Delivery time, device, and method still need to be selected.
 
 Later internet-discovery extension:
 
@@ -162,18 +192,23 @@ Status: Future.
 
 ## Recommended implementation order
 
-1. Confirm the two existing Immich locations for motivation and guitar media.
-2. Build the morning selector with history tracking and manual test delivery.
-3. Add the iPhone **Save to Immich** Share Sheet workflow.
-4. Establish stable network addresses and a maintained infrastructure inventory.
-5. Finish dependable backup schedules, alerts, and restore testing.
-6. Expand Home Assistant routines and secure PC control.
-7. Introduce Ansible with read-only inventory and dry runs before approved changes.
-8. Add reviewed internet discovery for motivation and guitar content.
-9. Connect everything to the Ecosystem assistant and unified dashboard.
+1. Define the structured workout-plan source, approved briefing modules, wake-up stages, and delivery devices for the Personal Morning Delivery Hub.
+2. Confirm the two existing Immich locations for motivation and guitar media.
+3. Build and manually test the workout selector, morning briefing, motivation/guitar selector, history tracking, and acknowledgement flow.
+4. Add the iPhone **Save to Immich** Share Sheet workflow.
+5. Establish stable network addresses and a maintained infrastructure inventory.
+6. Finish dependable backup schedules, alerts, and restore testing.
+7. Expand Home Assistant routines and secure PC control.
+8. Introduce Ansible with read-only inventory and dry runs before approved changes.
+9. Add reviewed internet discovery for motivation and guitar content.
+10. Connect everything to the Ecosystem assistant and unified dashboard.
 
 ## Decisions still needed
 
+- Exact structured source for the active workout plan and how plan changes are approved.
+- Which wake-up devices and escalation stages Trevor wants to test.
+- What action proves Trevor is genuinely out of bed and stops the wake-up sequence.
+- Which morning briefing modules are enabled, their order, and the maximum briefing length.
 - Morning delivery time and whether it changes by A day, B day, Friday, weekend, or summer schedule.
 - Delivery destination: phone notification, Home Assistant dashboard, Ecosystem dashboard, message, or a combination.
 - Exact Immich album/location names for motivation and guitar practice.
