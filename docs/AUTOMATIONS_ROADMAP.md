@@ -95,6 +95,34 @@ Possible later version:
 - Investigate monitoring actual Instagram saved collections through an authenticated browser.
 - Treat this as experimental because Instagram does not officially expose saved collections through its API; it would be fragile and could trigger account-security checks.
 
+### Reel-to-Media Request
+
+Status: Planned; added August 16, 2026.
+
+Goal: let Trevor share an Instagram Reel, TikTok, screenshot, image, or short clip showing a movie, television series, or anime and have Jarvis identify the exact title and request it through the homelab media stack.
+
+Workflow:
+
+1. Trevor shares the URL or media to a private **Identify and Request** shortcut/webhook.
+2. Preserve the original URL and collect only the accessible evidence needed for identification.
+3. Analyze sampled frames, on-screen text, captions, dialogue/transcript, music/audio cues, creator text, hashtags, and other available metadata.
+4. Search candidate titles and compare characters, actors, scenes, dialogue, release dates, alternate titles, and anime season/arc naming.
+5. Return the best candidate with poster, canonical title, year, type, confidence, and the evidence that led to it.
+6. If confidence is insufficient or several candidates remain, ask Trevor to choose instead of guessing.
+7. Determine the exact requested scope and preferences: movie/version, episode, season range, complete series, future monitoring, language/dub, subtitles, quality, file-size, and playback compatibility.
+8. Check Jellyfin and existing Sonarr/Radarr entries to prevent duplicates.
+9. Show the interpreted request for approval, then submit it through Jellyseerr/Seerr and the appropriate Sonarr/Radarr profile.
+10. Track it through searching, download, import, failure, and availability, then notify Trevor when it is ready.
+
+Requirements:
+
+- Support live-action movies/shows and anime, including alternate English/Japanese titles, remakes, specials, OVAs, split cours, and confusing season numbering.
+- Never silently request a low-confidence match, a different adaptation, or a broader season/series scope than Trevor intended.
+- Do not silently lower quality, language, subtitle, edition, or playback requirements.
+- Allow **identify only**, **save candidate for later**, and **identify and request** modes.
+- Keep the webhook private and remove temporary downloaded analysis media according to an approved retention rule.
+- Preserve normal source, account, network, storage, and access policies used by the configured media stack.
+
 ## Phase 2 — Home and device routines
 
 ### Home Assistant automation hub
@@ -214,12 +242,13 @@ Status: Future.
 3. Build and manually test the workout selector, morning briefing, motivation/guitar selector, history tracking, and acknowledgement flow.
 4. Build the first trusted Gospel Content Library collection and connect it to morning selections with citations.
 5. Add the iPhone **Save to Immich** Share Sheet workflow.
-6. Establish stable network addresses and a maintained infrastructure inventory.
-7. Finish dependable backup schedules, alerts, and restore testing.
-8. Expand Home Assistant routines and secure PC control.
-9. Introduce Ansible with read-only inventory and dry runs before approved changes.
-10. Add reviewed internet discovery for motivation and guitar content.
-11. Connect everything to the Ecosystem assistant and unified dashboard.
+6. Build and test the Reel-to-Media identification flow in identify-only mode before enabling approved Jellyseerr/Sonarr/Radarr submission.
+7. Establish stable network addresses and a maintained infrastructure inventory.
+8. Finish dependable backup schedules, alerts, and restore testing.
+9. Expand Home Assistant routines and secure PC control.
+10. Introduce Ansible with read-only inventory and dry runs before approved changes.
+11. Add reviewed internet discovery for motivation and guitar content.
+12. Connect everything to the Ecosystem assistant and unified dashboard.
 
 ## Decisions still needed
 
@@ -234,3 +263,5 @@ Status: Future.
 - Exact Immich album/location names for motivation and guitar practice.
 - Whether the guitar choice should follow a structured learning sequence or rotate among approved songs.
 - Retention rules for downloaded social-media videos and their source metadata.
+- Confidence threshold for automatic single-candidate presentation versus requiring Trevor to choose from multiple matches.
+- Default Reel-to-Media mode: identify only, save for later, or identify and request.
