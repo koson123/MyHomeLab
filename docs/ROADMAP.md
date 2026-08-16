@@ -143,6 +143,10 @@ Implement the detailed architecture and phased plan in [JARVIS.md](JARVIS.md).
 - [ ] Add a local LLM only as a replaceable interpretation, retrieval, summary, recommendation, and planning component; keep execution and permissions outside the model.
 - [ ] Add Jarvis-orchestrated teams of specialized AI employees with role-scoped capabilities, structured task briefs, shared task state, resource budgets, evidence requirements, independent review, and one approval path back to Trevor.
 - [ ] Support solo-specialist, maker-reviewer, research-panel, plan-execute-verify, and incident-team patterns without allowing sub-agents to inherit unrestricted authority.
+- [ ] Add an AI development department with product planning, architecture, frontend/backend/mobile/desktop/AI/automation/embedded specialists, UX, testing, security review, release engineering, and documentation under Jarvis orchestration.
+- [ ] Require specifications, isolated branches/workspaces, acceptance tests, independent review, demos, deployment previews, and rollback plans for things Trevor asks the team to build.
+- [ ] Add precise natural-language movie/show requests that resolve the exact title/version/scope and user-specified quality, language, subtitle, monitoring, storage, and playback constraints before submission through Seerr/Jellyseerr, Sonarr, and Radarr.
+- [ ] Search the existing library first, prevent duplicates, track fulfillment state, and never silently substitute a different title or lower the requested constraints.
 - [ ] Add voice and distributed panels after measuring hardware and selecting the wake-word, speech-to-text, and text-to-speech stack.
 - [ ] Preserve portable contracts and data so the proven homelab Jarvis can later migrate into Ecosystem OS.
 
