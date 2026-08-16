@@ -104,3 +104,22 @@ Implement this only after the homelab architecture, addressing, service placemen
 - [ ] Build health checks and post-change verification so playbooks confirm services actually return to a healthy state.
 - [ ] Document one-command runbooks for common tasks such as `update all Linux nodes`, `deploy a service`, `rotate an SSH key`, and `restart a stack`.
 - [ ] Design the automation layer so the future Ecosystem AI can invoke approved playbooks through a constrained interface instead of receiving unrestricted shell/root access.
+
+## Phase 9 — Jarvis music and Spotify-like experience
+
+This is a future music-system upgrade, separate from the automations roadmap. The goal is to make Trevor's self-hosted music experience feel more like Spotify while keeping the library and core playback local-first.
+
+- [ ] Upgrade the music side around Navidrome and its Subsonic-compatible API, with SoulSync supporting the planned acquisition/import workflow.
+- [ ] Make the Jarvis Music dashboard the primary music interface while retaining Feishin as a manual/browser player.
+- [ ] Let the local LLM/Jarvis understand natural-language music requests based on mood, activity, genre, energy, era, similarity, or a description of what Trevor wants to hear.
+- [ ] Let Jarvis find exact songs, artists, albums, and existing playlists and start background playback on approved devices.
+- [ ] Create and maintain personalized playlists from Trevor's library, including mood mixes, activity mixes, rediscovery playlists, favorites, recently added music, and guitar-practice playlists.
+- [ ] Use favorites, skips, repeats, listening history, playlist edits, and explicit feedback to improve recommendations.
+- [ ] Balance familiar music, rediscovery, and exploration while preventing generated playlists from becoming repetitive.
+- [ ] Recommend music already in the library and identify missing songs or artists for Trevor to review before importing.
+- [ ] Keep deterministic search, playlist storage, and ordinary playback functional without the LLM or external internet.
+- [ ] Eventually expose the same music controls through Trevor's desktop, phone, Home Assistant, Roku/media devices where supported, and Jarvis interfaces.
+
+## Related roadmaps
+
+- [Automations Roadmap](AUTOMATIONS_ROADMAP.md) — personal routines, Home Assistant workflows, content pipelines, and later homelab automation.
