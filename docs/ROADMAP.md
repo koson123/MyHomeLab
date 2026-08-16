@@ -141,6 +141,8 @@ Implement the detailed architecture and phased plan in [JARVIS.md](JARVIS.md).
 - [ ] Add proactive behavior through explicit event rules, quiet hours, cooldowns, acknowledgement, deduplication, and per-rule disable controls.
 - [ ] Build the trusted local Gospel Content Library from official Church sources with metadata, citations, offline search, update previews, and selected downloadable audio/video.
 - [ ] Add a local LLM only as a replaceable interpretation, retrieval, summary, recommendation, and planning component; keep execution and permissions outside the model.
+- [ ] Add Jarvis-orchestrated teams of specialized AI employees with role-scoped capabilities, structured task briefs, shared task state, resource budgets, evidence requirements, independent review, and one approval path back to Trevor.
+- [ ] Support solo-specialist, maker-reviewer, research-panel, plan-execute-verify, and incident-team patterns without allowing sub-agents to inherit unrestricted authority.
 - [ ] Add voice and distributed panels after measuring hardware and selecting the wake-word, speech-to-text, and text-to-speech stack.
 - [ ] Preserve portable contracts and data so the proven homelab Jarvis can later migrate into Ecosystem OS.
 
