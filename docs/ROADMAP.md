@@ -72,7 +72,8 @@
 - [ ] Nutrition/macro tracker
 - [ ] Frigate and local cameras
 - [ ] WorkAdventure
-- [ ] Local LLM/AI assistant VM
+- [ ] Local LLM/AI assistant VM running the modular homelab Jarvis foundation described in [JARVIS.md](JARVIS.md)
+- [ ] Trusted local Gospel Content Library sourced from official Church content for Jarvis search, study, audio, and automations
 - [ ] Gridfinity/random project stack
 - [ ] Nextcloud later
 
@@ -129,6 +130,19 @@ Jarvis begins as an independent homelab assistant so it can be useful long befor
 - [ ] Map Jarvis actions to Ecosystem's typed capabilities, permissions, confirmations, and audit records.
 - [ ] Give the Ecosystem version deeper system and device control, broader context, and more user-approved autonomy than the standalone homelab version can safely have.
 - [ ] Retire or reduce the standalone Jarvis only after the Ecosystem version reaches feature parity and the migration is verified.
+
+## Phase 10 — Jarvis core, proactive AI, and trusted Gospel content
+
+Implement the detailed architecture and phased plan in [JARVIS.md](JARVIS.md).
+
+- [ ] Build Jarvis as a modular homelab service in the planned 100 GB `mini-llm` VM.
+- [ ] Start with an authenticated deterministic core, typed capabilities, policy/approvals, audit logs, dashboard, and kill switch.
+- [ ] Connect Home Assistant, the Personal Morning Delivery Hub, Immich, notifications, workouts, music/media, and read-only homelab status in controlled phases.
+- [ ] Add proactive behavior through explicit event rules, quiet hours, cooldowns, acknowledgement, deduplication, and per-rule disable controls.
+- [ ] Build the trusted local Gospel Content Library from official Church sources with metadata, citations, offline search, update previews, and selected downloadable audio/video.
+- [ ] Add a local LLM only as a replaceable interpretation, retrieval, summary, recommendation, and planning component; keep execution and permissions outside the model.
+- [ ] Add voice and distributed panels after measuring hardware and selecting the wake-word, speech-to-text, and text-to-speech stack.
+- [ ] Preserve portable contracts and data so the proven homelab Jarvis can later migrate into Ecosystem OS.
 
 ## Related roadmaps
 
