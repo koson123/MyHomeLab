@@ -52,7 +52,63 @@ Converts a request or event into a structured plan.
 - Jarvis shows assumptions or asks for missing information when an action cannot be safely inferred.
 - The system can fall back to deterministic commands if the LLM is offline.
 
-### 3. Capability registry
+### 3. Multi-agent workforce and orchestration
+
+Jarvis acts as the executive orchestrator for teams of specialized AI agents that function like digital employees. Trevor gives goals and authority to Jarvis; Jarvis determines whether work should be handled directly, delegated to one specialist, or split across a temporary team.
+
+Jarvis responsibilities:
+
+- Translate Trevor's goal into a task brief, success criteria, constraints, deadline, risk level, and resource budget.
+- Select agents by verified role and capability rather than letting arbitrary models claim authority.
+- Break complex goals into bounded subtasks with declared dependencies.
+- Run independent research or analysis in parallel when useful.
+- Maintain a shared task board and pass only the context each agent needs.
+- Require agents to return evidence, artifacts, confidence, unresolved questions, and requested actions in a structured format.
+- Compare conflicting results, request review or testing, and synthesize one coherent answer or plan for Trevor.
+- Pause for Trevor's approval whenever delegated work reaches a permission boundary.
+- Record delegation, model/provider, tools, inputs, cost/compute, results, reviews, and final disposition.
+
+Initial specialist roles may include:
+
+- Research agent: gathers and cites reliable information.
+- Homelab operations agent: reads monitoring and configuration state and proposes repairs.
+- Automation engineer: designs Home Assistant, webhook, and scheduled workflows.
+- Software engineer: plans, writes, tests, and documents code in approved workspaces.
+- Security reviewer: checks permissions, secrets exposure, network impact, and unsafe assumptions.
+- Verification/test agent: independently tests claims, plans, configurations, and generated artifacts.
+- Media and music curator: manages recommendations, playlists, metadata, and personal feedback.
+- Gospel study agent: retrieves and cites official Church sources from the trusted local library.
+- Personal planning agent: helps with workouts, routines, schedules, goals, and morning delivery.
+- Documentation agent: keeps approved plans, runbooks, decisions, and handoffs synchronized.
+
+Agent types:
+
+- Permanent role agents have stable instructions, evaluation history, and narrow tool access.
+- Temporary project agents are created for one bounded goal and retired when complete.
+- Reviewer agents never approve their own work; high-impact plans require independent review.
+- External/cloud models may be optional specialists only when Trevor enables them and the data policy permits it.
+
+Delegation and safety rules:
+
+- Agents receive scoped capabilities, not Jarvis's full authority or raw credentials.
+- Sub-agents cannot silently create further agents, spend resources, contact people, publish, deploy, delete, purchase, expose services, or change infrastructure.
+- Jarvis sets limits for runtime, tokens/compute, concurrency, retries, storage, network access, and tool calls.
+- A failed or confused agent is stopped, replaced, or escalated instead of repeatedly acting.
+- Outputs are untrusted until validated according to the task's risk: citations for research, tests for code, previews for configuration, and independent review for sensitive changes.
+- Only Jarvis presents approval requests to Trevor, using the exact action, target, expected effect, evidence, and recovery plan.
+- Teams may recommend actions freely within their brief, but execution still goes through the capability and policy engines.
+
+Team patterns:
+
+- Solo specialist: one bounded low-risk task.
+- Maker-reviewer: one agent creates and a different agent checks.
+- Research panel: several agents investigate independently and Jarvis reconciles findings.
+- Plan-execute-verify: planner proposes steps, executor uses approved capabilities, verifier checks the result.
+- Incident team: monitoring analyst, service specialist, and security reviewer diagnose a failure while Jarvis coordinates and requests approval for recovery.
+
+The multi-agent layer must continue to produce a usable status and recovery path when one model, agent, or provider is unavailable. Jarvis remains the single accountable orchestrator and Trevor remains the final authority.
+
+### 4. Capability registry
 
 Each integration exposes a limited set of named actions and read operations.
 
@@ -71,7 +127,7 @@ Initial capability groups:
 
 Every capability defines its inputs, output, timeout, permissions, confirmation rule, audit data, and failure behavior.
 
-### 4. Policy and approval engine
+### 5. Policy and approval engine
 
 Jarvis assigns each action to a risk level.
 
@@ -83,7 +139,7 @@ Jarvis assigns each action to a risk level.
 
 Approvals should name the exact target, action, expected effect, and recovery path.
 
-### 5. Proactive event engine
+### 6. Proactive event engine
 
 Proactivity should be event-driven and policy-controlled rather than the LLM continuously deciding what to do.
 
@@ -110,7 +166,7 @@ Every proactive rule specifies:
 
 The first proactive features should be the Personal Morning Delivery Hub, genuinely important server alerts, and requested reminders. Broader suggestions come later after the signal-to-noise ratio is proven.
 
-### 6. Context and memory
+### 7. Context and memory
 
 Use different memory classes instead of one unlimited assistant memory.
 
@@ -123,7 +179,7 @@ Use different memory classes instead of one unlimited assistant memory.
 
 Trevor must be able to inspect, correct, export, or delete stored preferences and history. Temporary access to a screen, camera, file, or conversation does not automatically become long-term memory.
 
-### 7. Audit and observability
+### 8. Audit and observability
 
 For every tool use or proactive event, record:
 
@@ -212,6 +268,10 @@ Names are architectural roles, not final software selections:
 
 - `jarvis-gateway`
 - `jarvis-orchestrator`
+- `jarvis-agent-registry`
+- `jarvis-task-board`
+- `jarvis-agent-runtime`
+- `jarvis-evaluator`
 - `jarvis-events`
 - `jarvis-policy`
 - `jarvis-memory`
@@ -279,20 +339,28 @@ Names are architectural roles, not final software selections:
 - Add Jellyfin, Audiobookshelf, Immich, and playback-target control.
 - Add explicit feedback and bounded preference/history learning.
 
-### J7 — homelab assistance
+### J7 — multi-agent workforce
+
+- Build the agent registry, task contracts, shared task board, budgets, cancellation, and status reporting.
+- Start with maker-reviewer and research-panel patterns using narrowly scoped agents.
+- Add independent evidence, testing, and security-review requirements by task risk.
+- Expose one team-level approval path through Jarvis rather than allowing agents to request or exercise authority independently.
+- Measure quality, latency, resource use, failure rate, and value before increasing concurrency or autonomy.
+
+### J8 — homelab assistance
 
 - Add read-only infrastructure status and explanations.
 - Add approval-gated bounded recovery actions.
 - Later connect approved Ansible and Proxmox workflows with previews and audit logs.
 
-### J8 — voice and distributed panels
+### J9 — voice and distributed panels
 
 - Select wake-word, speech-to-text, and text-to-speech components after hardware tests.
 - Add room/device-aware voice routing.
 - Deploy old-iPad panels and approved speaker endpoints.
 - Make mute/privacy state obvious and locally controllable.
 
-### J9 — Ecosystem migration readiness
+### J10 — Ecosystem migration readiness
 
 - Freeze stable capability, context, event, and client contracts.
 - Export preferences, history, indexes, and policies cleanly.
@@ -302,6 +370,9 @@ Names are architectural roles, not final software selections:
 ## Decisions still needed
 
 - The first three Jarvis use cases to implement after the core.
+- Initial permanent AI employee roles and which roles may use local versus optional cloud models.
+- Per-team concurrency, compute/token budgets, time limits, and retry limits.
+- Which task categories require maker-reviewer, independent verification, or security review.
 - Local model runtime and model size after measuring available resources.
 - Wake word, speech-to-text, and text-to-speech stack.
 - Primary dashboard and notification destinations.
