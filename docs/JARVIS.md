@@ -228,6 +228,18 @@ Request resolution:
 - Capture language, original audio, dub, subtitles, forced subtitles, resolution, HDR/SDR, codec, release group, file-size ceiling, and playback-device compatibility when Trevor specifies them.
 - Use Trevor's saved defaults only when he has not overridden them in the request.
 
+Identification from Reels, TikToks, screenshots, and clips:
+
+- Accept a shared URL or media item through a private Jarvis endpoint.
+- Extract representative frames, OCR text, captions, dialogue/transcript, audio cues, creator text, hashtags, and available metadata.
+- Use several evidence types rather than trusting a single visual or caption match.
+- Compare candidates using characters, actors, animation style, scene descriptions, exact dialogue, release information, alternate titles, adaptations, and franchise relationships.
+- Handle anime-specific ambiguity including romanized/Japanese/English titles, seasons marketed under new names, split cours, films, specials, OVAs, remakes, and multiple adaptations.
+- Return title, year, type, poster, confidence, supporting evidence, and alternate candidates.
+- Ask Trevor to choose when confidence is low or the evidence fits multiple titles.
+- Support identify-only, save-for-later, and approved identify-and-request modes.
+- Remove temporary analysis copies according to the configured retention policy while retaining the original link and identification result when requested.
+
 Fulfillment flow:
 
 1. Search Jellyfin and the existing library first to avoid duplicates.
@@ -336,6 +348,7 @@ Names are architectural roles, not final software selections:
 - `jarvis-immich`
 - `jarvis-media`
 - `jarvis-media-request`
+- `jarvis-media-identify`
 - `jarvis-development`
 - `jarvis-music`
 - `jarvis-gospel`
@@ -396,6 +409,7 @@ Names are architectural roles, not final software selections:
 - Add Navidrome/Spotify-like discovery and playlist workflows.
 - Add Jellyfin, Audiobookshelf, Immich, and playback-target control.
 - Add exact movie/show resolution, library deduplication, request previews, Seerr/Sonarr/Radarr submission, progress tracking, and ready/failure notifications.
+- Add Reel/TikTok/screenshot/clip identification using frames, OCR, speech/captions, audio, metadata, evidence scoring, anime-aware title resolution, and confidence-gated confirmation.
 - Add explicit feedback and bounded preference/history learning.
 
 ### J7 — multi-agent workforce
@@ -436,6 +450,7 @@ Names are architectural roles, not final software selections:
 - Which task categories require maker-reviewer, independent verification, or security review.
 - Initial development-team roles, supported project types, repository access, branching rules, and definition-of-done template.
 - Default movie/show quality, language, subtitle, monitoring, file-size, and direct-play preferences.
+- Reel-to-Media identification confidence threshold, temporary-media retention, and default identify-only/save/request mode.
 - Local model runtime and model size after measuring available resources.
 - Wake word, speech-to-text, and text-to-speech stack.
 - Primary dashboard and notification destinations.
