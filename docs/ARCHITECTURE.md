@@ -64,7 +64,7 @@ Intended workloads:
 | VM 101 / `mini-mom` | Paperless-ngx, Mom Immich, custom inventory app | 64 GB | Running; Immich/Paperless verified; inventory app unverified |
 | VM 102 / `mini-router` | OPNsense router/firewall | 64 GB | Running; 2 vCPU / 4 GB RAM; dual bridge; starts first |
 | VM 103 / `mini-ha` | Home Assistant OS | 128 GB | Running; 2 vCPU / 4 GB RAM; `10.50.0.159` |
-| `mini-llm` | Local assistant/LLM | 100 GB | Planned |
+| `mini-llm` | Modular homelab Jarvis core, proactive-event engine, trusted Gospel index, and replaceable local model runtime | 100 GB | Planned |
 | VM 4 / `mini-life-heavy` | Frigate, WorkAdventure, Nextcloud later | 100 GB | Planned |
 | VM 5 / `mini-random` | Gridfinity and experiments | 30 GB | Planned |
 | VM 107 / `mini-games` | Crafty Controller and game servers | 200 GB | Running; 4 vCPU / 10 GB RAM; `10.50.0.118`; app audit pending |
@@ -101,3 +101,8 @@ Preferred VM baseline:
 - CIFS mounts for NAS storage
 
 Do not over-allocate RAM to game servers; the hosts have limited memory.
+
+
+## Jarvis deployment boundary
+
+The planned `mini-llm` VM hosts the modular homelab Jarvis services described in [JARVIS.md](JARVIS.md). Home Assistant remains on HAOS, large media remains on NAS storage, and Jarvis connects to other services through scoped APIs. The LLM is replaceable and does not receive unrestricted shell, Docker, Proxmox, Home Assistant, file, or credential access.
