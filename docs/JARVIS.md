@@ -73,13 +73,37 @@ Initial specialist roles may include:
 - Research agent: gathers and cites reliable information.
 - Homelab operations agent: reads monitoring and configuration state and proposes repairs.
 - Automation engineer: designs Home Assistant, webhook, and scheduled workflows.
-- Software engineer: plans, writes, tests, and documents code in approved workspaces.
+- Product manager: turns Trevor's idea into requirements, scope, milestones, and acceptance criteria.
+- System architect: designs components, interfaces, data flow, deployment, and migration boundaries.
+- Software developers: specialized frontend, backend, mobile, desktop, AI, automation, and integration engineers that build in approved repositories/workspaces.
+- Hardware/embedded engineer: plans firmware, electronics, device integrations, and prototypes for approved physical projects.
+- DevOps/release engineer: creates reproducible builds, containers, deployment previews, versioning, and rollback plans.
+- UI/UX designer: produces user flows, layouts, interaction requirements, and accessibility checks.
 - Security reviewer: checks permissions, secrets exposure, network impact, and unsafe assumptions.
 - Verification/test agent: independently tests claims, plans, configurations, and generated artifacts.
 - Media and music curator: manages recommendations, playlists, metadata, and personal feedback.
 - Gospel study agent: retrieves and cites official Church sources from the trusted local library.
 - Personal planning agent: helps with workouts, routines, schedules, goals, and morning delivery.
 - Documentation agent: keeps approved plans, runbooks, decisions, and handoffs synchronized.
+
+### AI development department
+
+When Trevor asks Jarvis to make something, Jarvis should assemble an appropriate project team rather than sending the entire request to one generic coding model.
+
+Development workflow:
+
+1. Jarvis records the idea, intended user, desired outcome, constraints, target devices, and definition of done.
+2. A product/planning agent converts it into a reviewable specification and milestone plan.
+3. An architect selects a design that fits Trevor's existing homelab, repositories, services, and future Ecosystem migration.
+4. Specialist developers work in isolated branches or workspaces with the minimum required repository and tool access.
+5. A test agent verifies behavior against acceptance criteria; a security reviewer checks permissions, secrets, dependencies, data handling, and network exposure.
+6. Jarvis presents demos, artifacts, test evidence, unresolved tradeoffs, deployment preview, and rollback plan to Trevor.
+7. Publishing, merging, deploying, purchasing hardware, or changing live services follows its normal approval level.
+8. Documentation and handoff agents update the correct GitHub project after approval.
+
+The department should support apps, websites, dashboards, automations, integrations, server services, scripts, AI tools, firmware, and later hardware projects. Jarvis tracks backlog, milestones, blockers, versions, tests, deployment state, and maintenance ownership for every project.
+
+Generated code is never considered complete merely because it compiles. Completion requires the agreed acceptance tests, independent review, usable documentation, and a recoverable deployment path.
 
 Agent types:
 
@@ -119,6 +143,7 @@ Initial capability groups:
 - Immich: search Trevor's library, retrieve curated collections, add approved items to selected albums.
 - Music: search Navidrome, play/pause/queue, create or update playlists, capture feedback.
 - Media: search and control Jellyfin, Audiobookshelf, Navidrome, and supported playback targets.
+- Media requests: resolve an exact movie/show request and, after confirmation when needed, submit a structured request through approved Seerr/Jellyseerr, Sonarr, and Radarr capabilities.
 - Gospel Library: search trusted local content, retrieve passages/talks, generate source-grounded study selections, and play stored audio.
 - Calendar/tasks/reminders: read relevant schedule state and create approved reminders when integrations are available.
 - Homelab: read monitoring, storage, backup, container, and VM status; propose bounded recovery actions.
@@ -189,6 +214,37 @@ For every tool use or proactive event, record:
 - Recovery or rollback result when applicable.
 
 Provide a dashboard for pending approvals, recent actions, failed automations, memory/preferences, and proactive-rule controls.
+
+## Precise movie and television requests
+
+Jarvis should support natural requests such as “find this movie,” “get this exact show,” or a more detailed description with release, edition, season, language, quality, subtitle, and storage preferences.
+
+Request resolution:
+
+- Identify the exact title using name, alternate title, year, franchise, actors, creator, network/service, plot description, external ID, or a shared link.
+- Distinguish remakes, similarly named titles, theatrical/director/extended cuts, specials, miniseries, anime seasons, dubbed/subtitled releases, and regional versions.
+- Ask one concise clarification when multiple candidates remain instead of guessing.
+- Understand scope such as one episode, selected episodes, one season, all aired seasons, future seasons, complete series, movie only, or an entire approved collection.
+- Capture language, original audio, dub, subtitles, forced subtitles, resolution, HDR/SDR, codec, release group, file-size ceiling, and playback-device compatibility when Trevor specifies them.
+- Use Trevor's saved defaults only when he has not overridden them in the request.
+
+Fulfillment flow:
+
+1. Search Jellyfin and the existing library first to avoid duplicates.
+2. Resolve the canonical movie/show and display poster/title/year plus the interpreted constraints.
+3. Show any unavailable or conflicting requirement before submission.
+4. Submit the approved request through Seerr/Jellyseerr and the appropriate Sonarr/Radarr profile rather than giving the LLM direct download-client control.
+5. Let the existing indexer/download stack perform its configured workflow and keep qBittorrent behind its approved VPN/kill-switch design when enabled.
+6. Track requested, searching, grabbed, downloading, importing, available, failed, and needs-attention states.
+7. Notify Trevor when it is ready, explain failures, and offer bounded approved corrections without silently lowering requested quality or changing the selected title.
+8. Preserve normal legal, account, source, network, storage, and access policies; Jarvis does not bypass service protections or obtain media from sources the configured system is not authorized to use.
+
+Examples Jarvis should eventually understand:
+
+- “Find the 1982 version, not the remake.”
+- “Get the whole show in 1080p with English subtitles, but do not replace the episodes I already have.”
+- “I only want seasons one through three and no future-season monitoring.”
+- “Find the extended edition that will direct-play on the Roku.”
 
 ## Trusted local Gospel Content Library
 
@@ -279,6 +335,8 @@ Names are architectural roles, not final software selections:
 - `jarvis-homeassistant`
 - `jarvis-immich`
 - `jarvis-media`
+- `jarvis-media-request`
+- `jarvis-development`
 - `jarvis-music`
 - `jarvis-gospel`
 - `jarvis-homelab`
@@ -337,6 +395,7 @@ Names are architectural roles, not final software selections:
 
 - Add Navidrome/Spotify-like discovery and playlist workflows.
 - Add Jellyfin, Audiobookshelf, Immich, and playback-target control.
+- Add exact movie/show resolution, library deduplication, request previews, Seerr/Sonarr/Radarr submission, progress tracking, and ready/failure notifications.
 - Add explicit feedback and bounded preference/history learning.
 
 ### J7 — multi-agent workforce
@@ -346,6 +405,8 @@ Names are architectural roles, not final software selections:
 - Add independent evidence, testing, and security-review requirements by task risk.
 - Expose one team-level approval path through Jarvis rather than allowing agents to request or exercise authority independently.
 - Measure quality, latency, resource use, failure rate, and value before increasing concurrency or autonomy.
+- Add the AI development department with product, architecture, specialist development, UX, testing, security, release, and documentation roles.
+- Require isolated workspaces/branches, acceptance criteria, independent tests, deployment previews, and rollback plans before live changes.
 
 ### J8 — homelab assistance
 
@@ -373,6 +434,8 @@ Names are architectural roles, not final software selections:
 - Initial permanent AI employee roles and which roles may use local versus optional cloud models.
 - Per-team concurrency, compute/token budgets, time limits, and retry limits.
 - Which task categories require maker-reviewer, independent verification, or security review.
+- Initial development-team roles, supported project types, repository access, branching rules, and definition-of-done template.
+- Default movie/show quality, language, subtitle, monitoring, file-size, and direct-play preferences.
 - Local model runtime and model size after measuring available resources.
 - Wake word, speech-to-text, and text-to-speech stack.
 - Primary dashboard and notification destinations.
