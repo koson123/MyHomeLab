@@ -11,6 +11,7 @@ Build a local-first automation layer connecting Trevor's homelab, Immich, Home A
 - Local-first: important routines must still work when the external internet is down.
 - Human approval for consequential infrastructure actions.
 - Curated personal media is trusted before automatically sourced internet content.
+- Official content published by The Church of Jesus Christ of Latter-day Saints is an approved trusted source for gospel retrieval, study selections, and morning delivery; preserve exact source attribution.
 - No silent destructive actions; keep logs and provide clear failure reports.
 - Store credentials with the minimum permissions needed.
 - Avoid duplicates and preserve original files and metadata when archiving media.
@@ -52,7 +53,7 @@ Morning briefing candidates:
 
 - Current time, date, weather, and only schedule information relevant to the morning.
 - Today's workout and first important responsibility.
-- A short scripture, spiritual prompt, or reminder to pray and study.
+- A short scripture, conference selection, spiritual prompt, or reminder to pray and study, grounded in the trusted local Gospel Content Library.
 - Important Home Assistant or homelab alerts that actually require Trevor's attention.
 - A concise progress or accountability reminder based on his approved goals.
 - Trevor will choose the final modules, ordering, delivery device, and maximum length before implementation.
@@ -163,6 +164,22 @@ Status: Planned direction.
 - Permit only explicitly approved low-risk automatic recovery, such as restarting a known container after health checks.
 - Escalate repeated failures instead of creating restart loops.
 
+## Phase 4 — Trusted Gospel content and study automations
+
+### Local Gospel Content Library
+
+Status: Planned; approved August 16, 2026.
+
+- Build a private local collection from official Church sources for use by Jarvis and automations.
+- Begin with approved scriptures, study helps, General Conference text, Come, Follow Me, Preach My Gospel, selected manuals/books, hymns, and selected officially downloadable audio/video.
+- Preserve the official title, speaker/author, publication, date, language, source URL, content hash, and retrieval/update time.
+- Provide offline full-text search first, with semantic search only as a secondary retrieval method.
+- Require Jarvis to cite the exact official source used for gospel answers, summaries, recommendations, and morning selections.
+- Support morning scriptures/talks, topic-based study queues, related-source recommendations, locally played talk audio, and read/listen history.
+- Use a curated importer and controlled updater with previews rather than an uncontrolled whole-site mirror.
+- Ask before large audio/video downloads and keep the private archive from being publicly redistributed.
+- Keep the locally cached collection usable when the internet is unavailable.
+
 ## Phase 4 — Existing automated content pipelines
 
 These are operational workflows to preserve and eventually manage from the same dashboard:
@@ -195,17 +212,20 @@ Status: Future.
 1. Define the structured workout-plan source, approved briefing modules, wake-up stages, and delivery devices for the Personal Morning Delivery Hub.
 2. Confirm the two existing Immich locations for motivation and guitar media.
 3. Build and manually test the workout selector, morning briefing, motivation/guitar selector, history tracking, and acknowledgement flow.
-4. Add the iPhone **Save to Immich** Share Sheet workflow.
-5. Establish stable network addresses and a maintained infrastructure inventory.
-6. Finish dependable backup schedules, alerts, and restore testing.
-7. Expand Home Assistant routines and secure PC control.
-8. Introduce Ansible with read-only inventory and dry runs before approved changes.
-9. Add reviewed internet discovery for motivation and guitar content.
-10. Connect everything to the Ecosystem assistant and unified dashboard.
+4. Build the first trusted Gospel Content Library collection and connect it to morning selections with citations.
+5. Add the iPhone **Save to Immich** Share Sheet workflow.
+6. Establish stable network addresses and a maintained infrastructure inventory.
+7. Finish dependable backup schedules, alerts, and restore testing.
+8. Expand Home Assistant routines and secure PC control.
+9. Introduce Ansible with read-only inventory and dry runs before approved changes.
+10. Add reviewed internet discovery for motivation and guitar content.
+11. Connect everything to the Ecosystem assistant and unified dashboard.
 
 ## Decisions still needed
 
 - Exact structured source for the active workout plan and how plan changes are approved.
+- Initial Gospel Library publications, General Conference year range, language, and audio/video scope.
+- Whether approved official Church text updates may ingest automatically after preview or always require approval.
 - Which wake-up devices and escalation stages Trevor wants to test.
 - What action proves Trevor is genuinely out of bed and stops the wake-up sequence.
 - Which morning briefing modules are enabled, their order, and the maximum briefing length.
