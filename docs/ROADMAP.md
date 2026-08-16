@@ -120,6 +120,16 @@ This is a future music-system upgrade, separate from the automations roadmap. Th
 - [ ] Keep deterministic search, playlist storage, and ordinary playback functional without the LLM or external internet.
 - [ ] Eventually expose the same music controls through Trevor's desktop, phone, Home Assistant, Roku/media devices where supported, and Jarvis interfaces.
 
+### Future transition into Ecosystem OS
+
+Jarvis begins as an independent homelab assistant so it can be useful long before Ecosystem OS is ready. Once Ecosystem OS has a mature intelligence service, capability system, permissions, device integration, and Server Edition, migrate or port Jarvis into Ecosystem rather than maintaining two competing assistants.
+
+- [ ] Keep Jarvis interfaces and homelab integrations modular enough to migrate later.
+- [ ] Preserve Jarvis's established music, media, Home Assistant, Immich, file-finding, and homelab abilities during the transition.
+- [ ] Map Jarvis actions to Ecosystem's typed capabilities, permissions, confirmations, and audit records.
+- [ ] Give the Ecosystem version deeper system and device control, broader context, and more user-approved autonomy than the standalone homelab version can safely have.
+- [ ] Retire or reduce the standalone Jarvis only after the Ecosystem version reaches feature parity and the migration is verified.
+
 ## Related roadmaps
 
 - [Automations Roadmap](AUTOMATIONS_ROADMAP.md) — personal routines, Home Assistant workflows, content pipelines, and later homelab automation.
