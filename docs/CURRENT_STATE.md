@@ -16,7 +16,7 @@
 1. **Protect Nova NAS data.** Nova is RAID 0; failure of either disk loses the entire 3.6 TB volume. RAID is not a backup, but RAID 0 also provides no drive-failure tolerance.
 2. **Deploy Proxmox Backup Server and scheduled jobs.** Neither Proxmox node currently has a backup job.
 3. **Create application-level backups.** Paperless, Actual, Mealie, NPM, Crafty/game worlds, ARR configs, and media-service configs lack confirmed current backups.
-4. **Create Home Assistant backups before updating it.** HA currently has zero backups.
+4. **Create a full Home Assistant backup before updating it.** A protected 37.51 MB local partial backup exists, but HA still reports `no_current_backup` and recommends a full backup.
 5. **Assign stable DHCP reservations/static addresses** to infrastructure guests and both NAS devices.
 6. **Expand unused LVM space** in `xps-life` and `xps-media` when convenient.
 
@@ -203,8 +203,10 @@ Planned:
 - Home Assistant Core 2026.8.1; 2026.8.2 was available during audit
 - Supervisor 2026.07.5, healthy and supported
 - 128 GB data disk; 11.3 GB used
-- Address assigned automatically
-- Zero Home Assistant backups
+- Address: `10.50.0.159/24`, assigned automatically; gateway/DNS `10.50.0.1`
+- One protected local backup exists: `Automatic backup 2026.8.1`, created August 17, 2026, 37.51 MB
+- That backup is **partial**, not full, and is stored only in Home Assistant (`.local`)
+- Home Assistant Resolution still reports `no_current_backup` and recommends `create_full_backup`
 
 Running apps/add-ons:
 
@@ -216,10 +218,11 @@ Running apps/add-ons:
 
 Remaining:
 
-- Automatic local and off-VM backups
+- Create and verify a **full** backup
+- Add automatic local and off-VM backups
 - Restore test
-- Stable address
-- Apply updates after backups exist
+- Stable address/DHCP reservation
+- Apply Core 2026.8.2 and Music Assistant 2.9.13 updates only after a full backup exists
 - Expand real home automations, PC power/control, ESPHome/Bluetooth proxies, cameras, presence, energy/water/gas, irrigation, and related planned projects
 
 ## `mini-games`
@@ -268,6 +271,14 @@ Risks/remaining:
 - DNS port 53; web ports 80/443
 - No NAS mount
 - Uses DHCP-assigned address
+- Pi-hole FTL v6.7
+- Upstream resolvers: Google DNS `8.8.8.8` and `8.8.4.4`
+- DNS resolution and blocking verified; `doubleclick.net` returned `0.0.0.0`
+- DNSSEC disabled; query logging enabled; listening mode `LOCAL`
+- Teleporter configuration backup created August 17, 2026 and copied outside LXC 110 to `pve-mini:/root/pihole-backups/`
+- Backup file: `pi-hole_mini-dns_teleporter_2026-08-17_20-39-41_UTC.zip` (23,695 bytes)
+- SHA-256: `1f3ba88919986fb636b5ec4ac248757f50846483e54efef510966665511eccf7`
+- Backup is outside the container but still on the same physical host; PBS/off-host protection remains required
 
 ## `mini-monitoring`
 
@@ -417,6 +428,7 @@ Review later:
 - Legacy restore/config packs exist under `TrevorServerDONTTOUCH`.
 - Gus's original 82 GB laptop backup remains retained.
 - Jellyfin's 6.15 GB native restore archive remains retained.
+- Pi-hole v6 Teleporter configuration export exists outside LXC 110 on `pve-mini`; SHA-256 recorded above.
 
 ## Not adequate/current
 
@@ -426,7 +438,7 @@ Review later:
 - No independent backup of NAS-mounted media/photos/documents was verified.
 - Nova NAS is RAID 0 with no verified second copy.
 - No current Paperless database/export backup.
-- No Home Assistant backup.
+- Home Assistant has one protected 37.51 MB **partial local** backup, but no verified full or off-host backup.
 - No Crafty/game-world backup.
 - No NPM backup.
 - No Actual or Mealie backup.
@@ -545,7 +557,7 @@ Core design rules:
 ## Phase A — Address current risks
 
 1. Design a second-copy migration/backup for Nova's RAID 0 data.
-2. Create a Home Assistant backup before applying updates.
+2. Create a **full** Home Assistant backup and confirm the `no_current_backup` repair issue clears before applying updates.
 3. Add Kuma monitors for all critical public and internal services and configure notifications.
 
 ## Phase B — Establish recoverability
