@@ -82,7 +82,7 @@ Remaining work:
 - Used: 2.5 TB (24%)
 - Available: 8 TB
 - Mounts successfully through systemd automount with no mount errors observed this boot
-- The former `moms-nas.gardnergate.cc` DNS/public endpoint was intentionally removed; a stale NPM proxy-host configuration still needs deletion.
+- The former `moms-nas.gardnergate.cc` DNS/public endpoint was intentionally removed, and its stale NPM proxy-host configuration was deleted August 17, 2026.
 
 Stored Immich data:
 
@@ -415,9 +415,9 @@ Backups/storage:
 | `sheets.gardnergate.cc` | `10.50.0.126:5088` |
 | `jellyseerr.gardnergate.cc` | `10.50.0.123:5055` |
 
-Removed/stale:
+Removed:
 
-- `moms-nas.gardnergate.cc` no longer exists by Trevor's decision. Delete its remaining NPM proxy-host entry; do not restore its DNS record.
+- `moms-nas.gardnergate.cc` no longer exists by Trevor's decision. Its remaining NPM proxy-host entry was deleted; do not restore its DNS record.
 
 Review later:
 
