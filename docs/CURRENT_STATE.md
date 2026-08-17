@@ -289,9 +289,14 @@ Risks/remaining:
 - Debian 12 LXC
 - 1 vCPU, 1 GB RAM, 12 GB disk
 - Uptime Kuma in Docker on port 3001
-- Exactly one configured monitor: `Gus Immich - Public`, HTTP check of `https://gus.gardnergate.cc`, active at a 60-second interval
+- Four configured HTTP(S) monitors, all confirmed green by Trevor:
+  - `Gus Immich - Public` — `https://gus.gardnergate.cc`
+  - `Home Assistant - Public` — `https://ha.gardnergate.cc`
+  - `Trevor Immich - Public` — `https://immich.gardnergate.cc`
+  - `Nginx Proxy Manager - Internal` — `http://10.50.0.135:81`
+- New monitors use a 60-second interval, three retries, zero followed redirects, and accepted status codes 200–399
 - Zero notification channels are configured
-- No other public services, internal services, hosts, NAS devices, DNS, or certificates are monitored yet
+- Remaining public services, hosts, NAS devices, DNS, and certificates still need monitoring
 - Live SQLite database: `/opt/uptime-kuma/data/kuma.db`
 - Consistent SQLite backup created August 17, 2026 and copied outside LXC 111 to `pve-mini:/root/uptime-kuma-backups/kuma-2026-08-17.db` (424 KB)
 - Database SHA-256: `c2db9b6f216bf8527e9859fae81eaf30bd2c5f50563681bb469b4af340cb355b`
@@ -569,7 +574,7 @@ Core design rules:
 
 1. Design a second-copy migration/backup for Nova's RAID 0 data.
 2. Copy Home Assistant full backup `c7271835` off-VM and refresh/confirm the stale `no_current_backup` repair issue clears before applying updates.
-3. Expand Kuma beyond its single Gus Immich monitor to all critical public/internal services, then configure and test notifications.
+3. Expand Kuma beyond its four confirmed monitors to the remaining public/internal services, then configure and test notifications.
 
 ## Phase B — Establish recoverability
 
