@@ -13,13 +13,12 @@
 
 ## Immediate priorities
 
-1. **Restore Gluetun protection on `xps-arr`.** qBittorrent currently has direct network access and is not forced through a VPN kill switch.
-2. **Protect Nova NAS data.** Nova is RAID 0; failure of either disk loses the entire 3.6 TB volume. RAID is not a backup, but RAID 0 also provides no drive-failure tolerance.
-3. **Deploy Proxmox Backup Server and scheduled jobs.** Neither Proxmox node currently has a backup job.
-4. **Create application-level backups.** Paperless, Actual, Mealie, NPM, Crafty/game worlds, ARR configs, and media-service configs lack confirmed current backups.
-5. **Create Home Assistant backups before updating it.** HA currently has zero backups.
-6. **Assign stable DHCP reservations/static addresses** to infrastructure guests and both NAS devices.
-7. **Expand unused LVM space** in `xps-life` and `xps-media` when convenient.
+1. **Protect Nova NAS data.** Nova is RAID 0; failure of either disk loses the entire 3.6 TB volume. RAID is not a backup, but RAID 0 also provides no drive-failure tolerance.
+2. **Deploy Proxmox Backup Server and scheduled jobs.** Neither Proxmox node currently has a backup job.
+3. **Create application-level backups.** Paperless, Actual, Mealie, NPM, Crafty/game worlds, ARR configs, and media-service configs lack confirmed current backups.
+4. **Create Home Assistant backups before updating it.** HA currently has zero backups.
+5. **Assign stable DHCP reservations/static addresses** to infrastructure guests and both NAS devices.
+6. **Expand unused LVM space** in `xps-life` and `xps-media` when convenient.
 
 ---
 
@@ -336,14 +335,13 @@ Running:
 - SoulSync
 - slskd
 
-Critical gap:
+Intentional temporary state:
 
-- **Gluetun is absent.** qBittorrent is attached directly to `arr-network`, not forced through a VPN container or kill switch.
+- **Gluetun is absent by current decision.** Trevor does not want to pay for a commercial VPN yet, so qBittorrent remains direct until that decision changes.
 
-Remaining:
+Remaining later:
 
-- Restore Gluetun and enforce dependency/network isolation.
-- Verify public IP from inside the qBittorrent network namespace after configuration.
+- When Trevor is ready to pay for a supported VPN, deploy Gluetun, enforce dependency/network isolation, and verify the kill switch.
 - Back up all `/opt/arr` configuration/appdata.
 - Review resource allocation and internal port exposure.
 
@@ -544,13 +542,11 @@ Core design rules:
 
 # 7. Ordered implementation backlog
 
-## Phase A — Stop current risks
+## Phase A — Address current risks
 
-1. Restore Gluetun and its kill switch for qBittorrent.
-2. Pause/avoid unattended downloading until VPN isolation is verified.
-3. Design a second-copy migration/backup for Nova's RAID 0 data.
-4. Create a Home Assistant backup before applying updates.
-5. Add Kuma monitors for all critical public and internal services and configure notifications.
+1. Design a second-copy migration/backup for Nova's RAID 0 data.
+2. Create a Home Assistant backup before applying updates.
+3. Add Kuma monitors for all critical public and internal services and configure notifications.
 
 ## Phase B — Establish recoverability
 
