@@ -2,7 +2,7 @@
 
 ## Priority actions from live audit — 2026-08-17
 
-- [ ] Restore Gluetun and prove qBittorrent has no network access when the VPN is down.
+- [ ] Later, when Trevor is ready to pay for a VPN, deploy Gluetun and prove qBittorrent has no network access when the VPN is down.
 - [ ] Create a second protected copy of Nova NAS data; its current two-disk RAID 0 loses everything if either drive fails.
 - [ ] Install Proxmox Backup Server and schedule backups for both nodes.
 - [ ] Create a Home Assistant backup before installing pending updates.
@@ -90,7 +90,7 @@
 
 ## Phase 7 — later infrastructure improvements
 
-- [ ] Select an outbound commercial VPN before enabling Gluetun.
+- [ ] Later, when Trevor is ready to pay for it, select an outbound commercial VPN before enabling Gluetun.
 - [ ] Route only qBittorrent through Gluetun; keep ARR UIs locally reachable.
 - [ ] Reassess `xps-arr` RAM due to swap pressure.
 - [ ] Redesign Jellyfin/media storage, possibly with ZFS.
