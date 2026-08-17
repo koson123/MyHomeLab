@@ -289,11 +289,16 @@ Risks/remaining:
 - Debian 12 LXC
 - 1 vCPU, 1 GB RAM, 12 GB disk
 - Uptime Kuma in Docker on port 3001
-- Four configured HTTP(S) monitors, all confirmed green by Trevor:
+- Eight configured HTTP(S) monitors, all confirmed green by Trevor:
   - `Gus Immich - Public` — `https://gus.gardnergate.cc`
   - `Home Assistant - Public` — `https://ha.gardnergate.cc`
   - `Trevor Immich - Public` — `https://immich.gardnergate.cc`
   - `Nginx Proxy Manager - Internal` — `http://10.50.0.135:81`
+  - `Actual Budget - Public` — `https://budget.gardnergate.cc`
+  - `Mealie - Public` — `https://mealie.gardnergate.cc`
+  - `Mom Immich - Public` — `https://mom-immich.gardnergate.cc`
+  - `Jellyfin - Public` — `https://jellyfin.gardnergate.cc`
+- Paperless monitoring is intentionally deferred until later
 - New monitors use a 60-second interval, three retries, zero followed redirects, and accepted status codes 200–399
 - Zero notification channels are configured
 - Remaining public services, hosts, NAS devices, DNS, and certificates still need monitoring
@@ -574,7 +579,7 @@ Core design rules:
 
 1. Design a second-copy migration/backup for Nova's RAID 0 data.
 2. Copy Home Assistant full backup `c7271835` off-VM and refresh/confirm the stale `no_current_backup` repair issue clears before applying updates.
-3. Expand Kuma beyond its four confirmed monitors to the remaining public/internal services, then configure and test notifications.
+3. Expand Kuma beyond its eight confirmed monitors to the remaining public/internal services; leave Paperless monitoring deferred until Trevor is ready, then configure and test notifications.
 
 ## Phase B — Establish recoverability
 
