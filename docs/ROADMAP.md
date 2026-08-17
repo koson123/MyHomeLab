@@ -1,17 +1,28 @@
 # Roadmap
 
+## Priority actions from live audit — 2026-08-17
+
+- [ ] Restore Gluetun and prove qBittorrent has no network access when the VPN is down.
+- [ ] Create a second protected copy of Nova NAS data; its current two-disk RAID 0 loses everything if either drive fails.
+- [ ] Install Proxmox Backup Server and schedule backups for both nodes.
+- [ ] Create a Home Assistant backup before installing pending updates.
+- [ ] Add current off-VM backups for Paperless, Actual, Mealie, NPM, Crafty worlds, ARR configs, and media-service configs.
+- [ ] Assign stable DHCP reservations/static addresses to infrastructure.
+- [ ] Finish Uptime Kuma coverage and notifications.
+- [ ] Audit JK NAS hardware, RAID, SMART, snapshots, backups, and UPS when access is available.
+
 ## Documentation audit — 2026-08-06
 
 - [x] Reconcile XPS service status against supplied `docker`/mount/storage output.
 - [x] Record corrected intended XPS allocations: 250 GB / 200 GB / 200 GB.
 - [x] Separate verified, known-operating, needs-verification, planned, and postponed states.
 - [x] Correct the Mealie incident record: working change was in Nginx Proxy Manager; DNS was an observation, not a proven root cause.
-- [ ] Capture fresh Proxmox and guest evidence for every remaining unverified claim.
+- [x] Capture fresh Proxmox and guest evidence for every current VM/LXC and both Proxmox hosts.
 
 ## Phase 1 — live inventory and finish service restoration
 
-- [ ] Export both Proxmox node inventories: Mini-PC complete; XPS still required.
-- [ ] Capture `lsblk`, LVM, filesystem, memory, mounts, Compose, and container health from all three XPS guests.
+- [x] Export both Proxmox node inventories.
+- [x] Capture `lsblk`, LVM, filesystem, memory, mounts, Compose, and container health from all three XPS guests.
 - [ ] Temporarily mount the backup NAS on `xps-media`.
 - [ ] Search the `xps-media` backup for Komga.
 - [ ] Restore or install Komga without touching the four healthy media services.
@@ -22,15 +33,15 @@
 ## Phase 2 — audit the mini-PC side
 
 - [x] Inventory every existing mini-PC VM/CT, ID, IP, CPU, RAM, disk, network, and autostart setting.
-- [ ] Verify OPNsense configuration and backups.
-- [ ] Verify Nginx Proxy Manager, certificates, proxy hosts, and backup.
-- [ ] Verify Pi-hole, upstream resolvers, DHCP integration, and persistence.
-- [ ] Verify Uptime Kuma.
-- [ ] Mom Immich and Paperless-ngx verified; verify/deploy the inventory app.
-- [ ] Verify Home Assistant OS.
-- [ ] Verify Crafty Controller and every game world.
-- [ ] Verify Gus/friend Immich is separate from Mom's stack.
-- [ ] Verify Proxmox Backup Server and recent backup jobs.
+- [x] Verify OPNsense version, interfaces, routes, firewall state, disk, and local config history; off-VM backup remains required.
+- [x] Verify Nginx Proxy Manager and all proxy-host routes; configuration/certificate backup remains required.
+- [x] Verify Pi-hole service, address, listening ports, disk, and persistence; upstream/DHCP policy review remains.
+- [x] Verify Uptime Kuma and add Gus Immich monitor; remaining monitors/notifications remain.
+- [x] Verify Mom Immich and Paperless-ngx; inventory app is intentionally planned for later.
+- [x] Verify Home Assistant OS, apps, storage, network, versions, and zero-backup state.
+- [x] Verify Crafty Controller and both running Minecraft servers; backups remain required.
+- [x] Restore and verify Gus Immich as an isolated Compose project on `xps-life` and publish `gus.gardnergate.cc`.
+- [x] Confirm PBS is not installed and no scheduled Proxmox backup jobs exist; deployment remains required.
 
 - [x] Install `qemu-guest-agent` in `mini-mom` and verify the service is active; confirm Proxmox-side agent response next.
 - [x] Expand `mini-mom`'s root LVM/filesystem from approximately 31 GB to approximately 62 GB.
@@ -38,8 +49,8 @@
 
 ## Phase 3 — reconcile VM storage
 
-- [ ] Confirm Proxmox shows `xps-life` at 250 GB, `xps-arr` at 200 GB, and `xps-media` at 200 GB.
-- [ ] Inspect the partition, LVM, and filesystem layout inside each XPS guest.
+- [x] Confirm Proxmox shows `xps-life` at 250 GB, `xps-arr` at 200 GB, and `xps-media` at 200 GB.
+- [x] Inspect the partition, LVM, and filesystem layout inside each XPS guest.
 - [ ] Back up each VM before changing its storage layout.
 - [ ] Expand each guest from roughly 97 GB usable to its full assigned virtual disk.
 - [ ] Confirm services and mounts still work after expansion and reboot.
