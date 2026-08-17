@@ -82,7 +82,7 @@ Remaining work:
 - Used: 2.5 TB (24%)
 - Available: 8 TB
 - Mounts successfully through systemd automount with no mount errors observed this boot
-- NPM currently exposes its admin/service endpoint as `moms-nas.gardnergate.cc`
+- The former `moms-nas.gardnergate.cc` DNS/public endpoint was intentionally removed; a stale NPM proxy-host configuration still needs deletion.
 
 Stored Immich data:
 
@@ -404,7 +404,6 @@ Backups/storage:
 | `swiparr.gardnergate.cc` | `10.50.0.123:4321` |
 | `immich.gardnergate.cc` | `10.50.0.152:2283` |
 | `budget.gardnergate.cc` | `10.50.0.152:5006` |
-| `moms-nas.gardnergate.cc` | `192.168.40.147:5006` |
 | `mealie.gardnergate.cc` | `10.50.0.152:9925` |
 | `gus.gardnergate.cc` | `10.50.0.152:2284` |
 | `paperless.gardnergate.cc` | `192.168.40.252:8000` |
@@ -416,10 +415,14 @@ Backups/storage:
 | `sheets.gardnergate.cc` | `10.50.0.126:5088` |
 | `jellyseerr.gardnergate.cc` | `10.50.0.123:5055` |
 
+Removed/stale:
+
+- `moms-nas.gardnergate.cc` no longer exists by Trevor's decision. Delete its remaining NPM proxy-host entry; do not restore its DNS record.
+
 Review later:
 
 - Confirm which services truly need public exposure.
-- Strongly review public NAS administration, Paperless, Home Assistant, Immich, Actual, and Mealie exposure and authentication controls.
+- Strongly review Paperless, Home Assistant, Immich, Actual, and Mealie exposure and authentication controls.
 - Keep NPM administration internal/VPN-only.
 - Back up NPM configuration and certificates.
 
