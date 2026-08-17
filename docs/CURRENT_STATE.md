@@ -16,7 +16,7 @@
 1. **Protect Nova NAS data.** Nova is RAID 0; failure of either disk loses the entire 3.6 TB volume. RAID is not a backup, but RAID 0 also provides no drive-failure tolerance.
 2. **Deploy Proxmox Backup Server and scheduled jobs.** Neither Proxmox node currently has a backup job.
 3. **Create application-level backups.** Paperless, Actual, Mealie, NPM, Crafty/game worlds, ARR configs, and media-service configs lack confirmed current backups.
-4. **Create a full Home Assistant backup before updating it.** A protected 37.51 MB local partial backup exists, but HA still reports `no_current_backup` and recommends a full backup.
+4. **Copy the verified full Home Assistant backup off-VM before updating.** A 37.92 MB full local backup now exists; HA's repair warning had not yet refreshed immediately after creation.
 5. **Assign stable DHCP reservations/static addresses** to infrastructure guests and both NAS devices.
 6. **Expand unused LVM space** in `xps-life` and `xps-media` when convenient.
 
@@ -204,9 +204,11 @@ Planned:
 - Supervisor 2026.07.5, healthy and supported
 - 128 GB data disk; 11.3 GB used
 - Address: `10.50.0.159/24`, assigned automatically; gateway/DNS `10.50.0.1`
-- One protected local backup exists: `Automatic backup 2026.8.1`, created August 17, 2026, 37.51 MB
-- That backup is **partial**, not full, and is stored only in Home Assistant (`.local`)
-- Home Assistant Resolution still reports `no_current_backup` and recommends `create_full_backup`
+- Local partial backup: `Automatic backup 2026.8.1`, created August 17, 2026, 37.51 MB, protected
+- Verified local full backup: `Full backup before updates 2026-08-17`, slug `c7271835`, 37.92 MB
+- The full backup includes Home Assistant, all five apps/add-ons, and the `share`, `ssl`, and `media` folders
+- Both backups are stored only in Home Assistant (`.local`); the full backup is not password-protected
+- Home Assistant Resolution still showed stale `no_current_backup`/`create_full_backup` entries when checked immediately after the full backup completed
 
 Running apps/add-ons:
 
@@ -218,7 +220,7 @@ Running apps/add-ons:
 
 Remaining:
 
-- Create and verify a **full** backup
+- Copy the verified full backup off-VM and verify its integrity
 - Add automatic local and off-VM backups
 - Restore test
 - Stable address/DHCP reservation
@@ -438,7 +440,7 @@ Review later:
 - No independent backup of NAS-mounted media/photos/documents was verified.
 - Nova NAS is RAID 0 with no verified second copy.
 - No current Paperless database/export backup.
-- Home Assistant has one protected 37.51 MB **partial local** backup, but no verified full or off-host backup.
+- Home Assistant has a verified 37.92 MB **full local** backup plus a protected 37.51 MB partial backup, but no off-VM copy yet.
 - No Crafty/game-world backup.
 - No NPM backup.
 - No Actual or Mealie backup.
@@ -557,7 +559,7 @@ Core design rules:
 ## Phase A — Address current risks
 
 1. Design a second-copy migration/backup for Nova's RAID 0 data.
-2. Create a **full** Home Assistant backup and confirm the `no_current_backup` repair issue clears before applying updates.
+2. Copy Home Assistant full backup `c7271835` off-VM and refresh/confirm the stale `no_current_backup` repair issue clears before applying updates.
 3. Add Kuma monitors for all critical public and internal services and configure notifications.
 
 ## Phase B — Establish recoverability
