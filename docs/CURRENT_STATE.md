@@ -289,9 +289,14 @@ Risks/remaining:
 - Debian 12 LXC
 - 1 vCPU, 1 GB RAM, 12 GB disk
 - Uptime Kuma in Docker on port 3001
-- Gus Immich public monitor was added and confirmed by Trevor
-- Other monitor coverage and notifications remain to be inventoried/configured
-- No monitoring-data backup identified
+- Exactly one configured monitor: `Gus Immich - Public`, HTTP check of `https://gus.gardnergate.cc`, active at a 60-second interval
+- Zero notification channels are configured
+- No other public services, internal services, hosts, NAS devices, DNS, or certificates are monitored yet
+- Live SQLite database: `/opt/uptime-kuma/data/kuma.db`
+- Consistent SQLite backup created August 17, 2026 and copied outside LXC 111 to `pve-mini:/root/uptime-kuma-backups/kuma-2026-08-17.db` (424 KB)
+- Database SHA-256: `c2db9b6f216bf8527e9859fae81eaf30bd2c5f50563681bb469b4af340cb355b`
+- Compose backup SHA-256: `3e60e60b480cffe1db73abb51c7625b50e65799e2fdb0d82a6ae1acaf54d8c9b`
+- These copies remain on the same physical mini-PC; PBS/off-host protection is still required
 
 ## `xps-life`
 
@@ -431,6 +436,7 @@ Review later:
 - Gus's original 82 GB laptop backup remains retained.
 - Jellyfin's 6.15 GB native restore archive remains retained.
 - Pi-hole v6 Teleporter configuration export exists outside LXC 110 on `pve-mini`; SHA-256 recorded above.
+- A consistent Uptime Kuma SQLite backup and Compose file exist outside LXC 111 on `pve-mini`; checksums recorded above.
 
 ## Not adequate/current
 
@@ -446,7 +452,7 @@ Review later:
 - No Actual or Mealie backup.
 - No ARR appdata backup.
 - No Audiobookshelf/Navidrome/Sheets backup.
-- No monitoring-data backup.
+- Uptime Kuma now has a one-time local host-level database/Compose backup, but no scheduled or off-host backup.
 - No documented routine restore tests.
 
 Legacy backup storage on JK NAS:
@@ -560,7 +566,7 @@ Core design rules:
 
 1. Design a second-copy migration/backup for Nova's RAID 0 data.
 2. Copy Home Assistant full backup `c7271835` off-VM and refresh/confirm the stale `no_current_backup` repair issue clears before applying updates.
-3. Add Kuma monitors for all critical public and internal services and configure notifications.
+3. Expand Kuma beyond its single Gus Immich monitor to all critical public/internal services, then configure and test notifications.
 
 ## Phase B — Establish recoverability
 
