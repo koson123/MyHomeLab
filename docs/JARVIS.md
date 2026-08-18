@@ -149,6 +149,9 @@ Initial capability groups:
 - Homelab: read monitoring, storage, backup, container, and VM status; propose bounded recovery actions.
 - PC agent: wake, sleep, and launch only predefined approved desktop actions.
 - Notifications: send to approved phones, dashboards, speakers, and panels.
+- Internet research and public-content retrieval: evaluate **Agent Reach** as a replaceable routing/health-check layer for read-only access to supported web, GitHub, YouTube, RSS, Reddit, Instagram, and other platform sources through narrowly scoped upstream tools.
+
+Agent Reach must run in an isolated service/container with no inherited Jarvis authority. Begin with zero-configuration public/read-only channels. Any cookie- or login-backed connector requires a dedicated secondary account where practical, locally protected credentials, explicit per-platform enablement, rate limits, retention limits, and acceptance of platform restrictions or account-ban risk. Posting, commenting, liking, messaging, following, purchasing, deleting, or changing an account is outside the retrieval capability and requires a separate future capability and approval policy.
 
 Every capability defines its inputs, output, timeout, permissions, confirmation rule, audit data, and failure behavior.
 
@@ -392,8 +395,10 @@ Names are architectural roles, not final software selections:
 
 ### J4 — local LLM assistance
 
-- Select a model/runtime based on measured hardware.
-- Add natural-language interpretation, retrieval-grounded answers, summarization, and plan generation.
+- Evaluate **Qwen3.8-27B** as the leading future local multimodal Jarvis model candidate, alongside smaller fallback models, using measured latency, memory use, vision quality, tool use, and power consumption on the available hardware.
+- Do not deploy Qwen3.8-27B on the current mini-PC/XPS merely because it is available; target it for the planned AMD Ryzen AI Halo-class upgrade or other hardware that proves adequate through testing.
+- Keep the model behind an OpenAI-compatible, replaceable provider interface so Jarvis can use a smaller local model, Qwen3.8-27B, or an explicitly approved cloud model without changing the capability or policy layers.
+- Add natural-language interpretation, retrieval-grounded answers, summarization, multimodal understanding, and plan generation.
 - Keep typed execution and policy outside the model.
 - Evaluate latency, hallucinations, source faithfulness, and fallback behavior.
 
@@ -410,6 +415,8 @@ Names are architectural roles, not final software selections:
 - Add Jellyfin, Audiobookshelf, Immich, and playback-target control.
 - Add exact movie/show resolution, library deduplication, request previews, Seerr/Sonarr/Radarr submission, progress tracking, and ready/failure notifications.
 - Add Reel/TikTok/screenshot/clip identification using frames, OCR, speech/captions, audio, metadata, evidence scoring, anime-aware title resolution, and confidence-gated confirmation.
+- Prototype Agent Reach for link ingestion, public-source research, YouTube transcripts, GitHub/RSS retrieval, and supported Instagram metadata; keep direct media analysis and identification in Jarvis's typed pipeline rather than trusting one scraper or caption.
+- Verify each enabled Agent Reach backend with real read-only acceptance tests, document upstream dependencies, and provide a kill switch and graceful fallback when a platform changes or blocks access.
 - Add explicit feedback and bounded preference/history learning.
 
 ### J7 — multi-agent workforce
