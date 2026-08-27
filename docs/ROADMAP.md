@@ -60,6 +60,9 @@
 - [ ] Give all permanent homelab infrastructure stable IP addresses later, using documented static assignments and/or DHCP reservations as appropriate; cover Proxmox hosts, VMs/CTs, NAS devices, Raspberry Pis, network infrastructure, and other long-lived servers/services.
 - [ ] Create and maintain a documented IP/address allocation map so new infrastructure does not conflict with existing assignments.
 - [ ] Correct IPv4 and IPv6 DNS distribution to clients.
+- [ ] Design and create an `IoT Local-Only` VLAN for smart/IoT devices that do not need cloud access; block outbound Internet by default and allow only required local services such as Home Assistant, Pi-hole/DNS, NTP, and explicitly approved local endpoints.
+- [ ] Keep Internet-dependent smart/IoT devices on a separate `IoT Cloud` VLAN or equivalent policy group with outbound Internet access but isolation from trusted clients, servers, NAS devices, and management networks.
+- [ ] Document VLAN IDs, subnets, DHCP scopes, mDNS/discovery exceptions, and OPNsense firewall rules before treating the IoT segmentation as complete.
 - [ ] Set up WireGuard remote access.
 - [ ] Test WireGuard from phone and laptop outside HomeLab Wi-Fi.
 - [ ] Move private/admin services to VPN-only access.
@@ -87,6 +90,17 @@
 - [ ] Trusted local Gospel Content Library sourced from official Church content for Jarvis search, study, audio, and automations
 - [ ] Gridfinity/random project stack
 - [ ] Nextcloud later
+
+### Retro gaming and ROM library progression
+
+Treat Moonfin retro gaming as the initial experiment, not the permanent game-library architecture.
+
+- [ ] Install and test the Moonfin client on the devices Trevor wants to use for retro games, using its Jellyfin-backed retro-game library, native libretro playback, controller support, and synced save states.
+- [ ] Keep the first Moonfin retro-gaming setup lightweight and measure the real load on the current Jellyfin/media VM and available storage before expanding the library.
+- [ ] Spend time researching RomM and its preferred deployment, storage, emulator/client workflow, backup needs, and hardware requirements before committing to it.
+- [ ] When the homelab has enough CPU/RAM/storage headroom and the design has been researched, deploy RomM as the primary self-hosted ROM/game library manager and player.
+- [ ] Migrate the retro-game-library role away from Moonfin/Jellyfin to RomM once RomM is proven stable and preferable; Moonfin may still remain as a Jellyfin media client if it is useful for movies/TV/music.
+- [ ] Back up RomM configuration, metadata, save files/save states, and any other irreplaceable game-library data as part of the normal homelab backup strategy.
 
 ## Phase 7 — later infrastructure improvements
 
