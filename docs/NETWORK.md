@@ -8,6 +8,27 @@
 - Parent-side NAS address observed: `192.168.40.147`.
 - Services should keep working locally when the internet is unavailable wherever practical.
 
+## IoT VLAN policy — planned
+
+Use separate network policy for smart/IoT devices based on whether they genuinely require cloud access.
+
+### IoT Local-Only VLAN
+
+- Create a dedicated VLAN for smart/IoT devices that can operate entirely through local services.
+- Block outbound Internet access by default.
+- Allow only the local services each device actually requires, such as Home Assistant, Pi-hole/DNS, local NTP, and explicitly approved local endpoints/controllers.
+- Block unrestricted access from this VLAN to normal clients, management interfaces, servers, NAS devices, and other VLANs.
+- Add narrowly scoped exceptions only when a device has a documented local dependency.
+- Permit discovery/mDNS forwarding across VLANs only where a specific integration requires it rather than allowing broad inter-VLAN access.
+
+### IoT Cloud VLAN
+
+- Keep IoT devices that truly require vendor/cloud services on a separate Internet-capable IoT VLAN or equivalent policy group.
+- Allow required outbound Internet access while still isolating those devices from trusted clients, infrastructure, and management networks.
+- Permit only explicitly required connections to Home Assistant or other local controllers.
+
+No VLAN ID or subnet is assigned yet; select and document them when the OPNsense/VLAN design is implemented.
+
 ## Known addresses
 
 | Address | Device/service | Confidence |
