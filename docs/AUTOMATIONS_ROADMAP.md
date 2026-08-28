@@ -1,6 +1,6 @@
 # Trevor's Automations Roadmap
 
-Last updated: August 16, 2026
+Last updated: August 27, 2026
 
 ## Purpose
 
@@ -174,6 +174,58 @@ Status: Planned prerequisite.
 - Assign stable IPs or DHCP reservations to infrastructure devices and services.
 - Maintain a single inventory used by DNS, monitoring, Ansible, backups, and documentation.
 
+### UPS-aware power-loss protection and automatic recovery
+
+Status: Planned; added August 27, 2026.
+
+Goal: protect the homelab from utility power failures with a UPS-backed, locally controlled shutdown and recovery sequence that rides through short outages, warns active users, shuts systems down cleanly during longer outages, and automatically restores service when stable utility power returns.
+
+Primary design:
+
+- Use a compatible UPS connected by USB or network and monitor it with **Network UPS Tools (NUT)** or an equivalent local UPS-management service.
+- On utility-power loss (`ONBATT`), immediately log the event and start a configurable outage timer. Initial planning target: approximately **5 minutes**, to be tuned after measuring real UPS runtime and server load.
+- If utility power returns (`ONLINE`) before the timer expires, cancel the shutdown sequence and leave the homelab running.
+- Add a second safety trigger based on UPS low-battery/critical-runtime state. If the battery reaches the emergency threshold before the normal timer expires, begin graceful shutdown immediately rather than waiting for the timer.
+- Keep the design local-first so the shutdown logic does not depend on cloud services or Internet availability.
+
+Minecraft integration:
+
+- When an outage begins, send an in-game server message telling connected players that the server is running on UPS backup power.
+- If the outage continues, send staged warnings before shutdown, such as a two-minute warning followed by shorter 30-second and 10-second warnings where practical.
+- Immediately before stopping Minecraft, issue the appropriate save command (for example `save-all` where applicable), verify or allow time for the save to complete, and then stop the Minecraft server cleanly.
+- Use the server's supported management path, such as RCON, the container console, systemd, or another authenticated local interface; do not expose an unauthenticated management endpoint.
+- If power returns before shutdown begins, send an in-game message that utility power has been restored and the shutdown was cancelled.
+
+Graceful shutdown sequencing:
+
+1. Record the outage and shutdown reason.
+2. Warn interactive users and stop accepting work where appropriate.
+3. Save and stop Minecraft and other interactive/game services cleanly.
+4. Stop application services and database workloads that depend on shared storage.
+5. Gracefully shut down nonessential VMs/containers and secondary Proxmox hosts in dependency order.
+6. Flush outstanding writes and stop storage clients before shutting down NAS/storage systems.
+7. Keep core networking available as long as practical so NUT coordination and shutdown commands can complete.
+8. Shut down the UPS-controller/primary Proxmox host last.
+9. Where the selected UPS supports it, command the UPS to turn protected outlets off after all systems are safely halted, preventing uncontrolled reboot attempts while utility power remains unstable.
+
+Automatic recovery requirements:
+
+- Enable the appropriate BIOS/UEFI **Restore on AC Power Loss / AC Recovery / Power On after power failure** setting on physical servers that should automatically return after an outage.
+- Configure Proxmox VMs and containers with intentional startup order and delays so infrastructure dependencies start before services that rely on them.
+- Bring storage, networking, DNS, and other foundation services up before application stacks where dependencies require it.
+- Start Minecraft only after its required storage/network dependencies are healthy.
+- If supported by the selected UPS, use a configurable power-return/restart delay so systems do not immediately restart during rapidly unstable utility power.
+- Log recovery and report any service that fails to return to a healthy state.
+
+Testing and safety requirements:
+
+- Measure real UPS runtime under representative homelab load before finalizing timer and battery thresholds.
+- Test the outage flow by disconnecting **utility input to the UPS**, not by abruptly cutting UPS output to the servers.
+- Test both branches: short outage with cancellation and long outage with full graceful shutdown.
+- Verify Minecraft saves, VM/container shutdown, storage unmount/flush behavior, host shutdown order, UPS power-off behavior, BIOS auto-start, Proxmox startup ordering, and service health after recovery.
+- Repeat controlled tests periodically and after major hardware, UPS-battery, Proxmox, storage, or network changes.
+- Never let the normal outage timer exceed the amount of battery reserve needed to complete the full graceful shutdown sequence with safety margin.
+
 ### Backup automation
 
 Status: Planned/partially available.
@@ -244,11 +296,12 @@ Status: Future.
 5. Add the iPhone **Save to Immich** Share Sheet workflow.
 6. Build and test the Reel-to-Media identification flow in identify-only mode before enabling approved Jellyseerr/Sonarr/Radarr submission.
 7. Establish stable network addresses and a maintained infrastructure inventory.
-8. Finish dependable backup schedules, alerts, and restore testing.
-9. Expand Home Assistant routines and secure PC control.
-10. Introduce Ansible with read-only inventory and dry runs before approved changes.
-11. Add reviewed internet discovery for motivation and guitar content.
-12. Connect everything to the Ecosystem assistant and unified dashboard.
+8. Select a compatible UPS, measure runtime, and implement/test the NUT-based timed power-loss shutdown, Minecraft warning/save flow, dependency-aware shutdown, and automatic recovery sequence.
+9. Finish dependable backup schedules, alerts, and restore testing.
+10. Expand Home Assistant routines and secure PC control.
+11. Introduce Ansible with read-only inventory and dry runs before approved changes.
+12. Add reviewed internet discovery for motivation and guitar content.
+13. Connect everything to the Ecosystem assistant and unified dashboard.
 
 ## Decisions still needed
 
@@ -265,3 +318,8 @@ Status: Future.
 - Retention rules for downloaded social-media videos and their source metadata.
 - Confidence threshold for automatic single-candidate presentation versus requiring Trevor to choose from multiple matches.
 - Default Reel-to-Media mode: identify only, save for later, or identify and request.
+- Exact UPS model/capacity and whether it exposes reliable USB or network telemetry compatible with NUT.
+- Which machine should act as the primary NUT controller and how secondary Proxmox hosts/NAS systems should receive coordinated shutdown commands.
+- Final outage timer, low-battery/runtime threshold, and minimum shutdown safety reserve after real runtime testing.
+- Exact Minecraft management method and warning intervals.
+- Final shutdown and startup dependency order for Proxmox hosts, NAS/storage, networking, VMs, containers, and application stacks.
