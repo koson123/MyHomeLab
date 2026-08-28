@@ -1,5 +1,21 @@
 # Roadmap
 
+## Immediate next session — full server reconciliation and operating workflow
+
+This is the next major homelab task before broad new expansion. Follow [OPERATING_WORKFLOW.md](OPERATING_WORKFLOW.md) so the repository, rather than conversation memory, becomes the durable source of truth.
+
+- [ ] Perform a complete physical-host, Proxmox VM/LXC, Docker/Compose, native-service, storage, network, and endpoint inventory from fresh live evidence.
+- [ ] Compare the live environment against `CURRENT_STATE.md`, `SERVICES.md`, `ARCHITECTURE.md`, `NETWORK.md`, `STORAGE_BACKUPS.md`, and this roadmap; explicitly reconcile every mismatch.
+- [ ] Identify everything that should be running but is missing, stopped, unhealthy, obsolete, duplicated, or intentionally postponed.
+- [ ] Verify end-to-end health of every critical service, not merely whether its process/container is running.
+- [ ] Map and test service dependencies and intended interconnections: DNS, TLS/reverse proxy, storage, databases/caches, Home Assistant, media/ARR, Immich, monitoring, backups, notifications, and Jarvis/automation integrations.
+- [ ] Connect systems that are intended to interoperate but currently are not, working in dependency order and recording any blocked integrations.
+- [ ] Verify autostart/startup ordering and recovery requirements for physical hosts, Proxmox guests, storage, networking, and critical application stacks.
+- [ ] Establish the session-start/session-end documentation workflow in `OPERATING_WORKFLOW.md` so each future session can resume from verified repository state instead of reconstructing context from chat history.
+- [ ] Build an automation inventory identifying what can be safely automated immediately, what should be deterministic through Ansible/APIs, and what must retain explicit human approval.
+- [ ] Define the first automation implementation wave: health/inventory checks, drift detection, backups and verification, monitoring/notifications, UPS shutdown/recovery, safe bounded service recovery, and post-change validation.
+- [ ] Finish the reconciliation pass by updating `CURRENT_STATE.md`, all affected subsystem documents, roadmap checkboxes, blockers, and an exact dependency-ordered next-action list.
+
 ## Priority actions from live audit — 2026-08-17
 
 - [ ] Later, when Trevor is ready to pay for a VPN, deploy Gluetun and prove qBittorrent has no network access when the VPN is down.
@@ -181,3 +197,4 @@ Implement the detailed architecture and phased plan in [JARVIS.md](JARVIS.md).
 ## Related roadmaps
 
 - [Automations Roadmap](AUTOMATIONS_ROADMAP.md) — personal routines, Home Assistant workflows, content pipelines, and later homelab automation.
+- [Operating Workflow](OPERATING_WORKFLOW.md) — session workflow, full-server reconciliation, source-of-truth rules, and automation/human-approval governance.
