@@ -234,7 +234,10 @@ Remaining:
 - Ubuntu 24.04.4 LTS
 - 4 vCPU, about 10 GB RAM allocated
 - Crafty Controller in Docker; UI on HTTPS port 8443
-- 46 GB of server data; VM filesystem 61% used
+- Proxmox virtual disk: 200 GB
+- Ubuntu root LV/filesystem expanded online from 99 GB to the full 198 GB LVM PV on August 29, 2026
+- Filesystem after expansion: 195 GB usable, 71 GB used, 116 GB free (38%)
+- `/opt/crafty` currently uses 61 GB
 - No NAS mount
 - No real game-server backups
 - `/opt/crafty/backups` is empty
