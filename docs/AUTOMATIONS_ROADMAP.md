@@ -1,6 +1,6 @@
 # Trevor's Automations Roadmap
 
-Last updated: August 27, 2026
+Last updated: August 31, 2026
 
 ## Purpose
 
@@ -279,6 +279,54 @@ Status: Long-term architecture.
 - Use typed actions, scoped permissions, confirmations, logs, and undo/recovery where possible.
 - Coordinate automations across the 24/7 server edition of Ecosystem OS and Trevor's personal devices.
 
+### Conversational game-library automation
+
+Status: Long-term goal; added August 31, 2026.
+
+Goal: let Trevor talk to Jarvis naturally about retro games and have the homelab identify, inventory, organize, import, and expose the requested games through the game library without Trevor manually managing files.
+
+Example requests:
+
+- "Go find Pokémon Emerald."
+- "Find all the Pokémon games."
+- "What Pokémon games am I missing?"
+- "Add every main-series Pokémon game I already have from Game Boy through DS."
+- "Find all my Zelda games and organize them."
+- "Add this game to my library and make it playable on Moonfin."
+
+Planned architecture:
+
+1. Jarvis interprets the natural-language request and converts it into an explicit game/library query.
+2. Search the existing NAS, ROM library, approved import folders, backups, and other authorized local storage first.
+3. Identify games using filenames, platform information, metadata, hashes, region/version data, and other available evidence rather than relying only on loose filename matching.
+4. Compare the requested set against the owned library and clearly report games that are already present, duplicates, alternate versions, and games that are missing.
+5. Organize approved files into the correct platform/library structure without deleting originals unless Trevor explicitly approves a migration.
+6. Fetch or refresh artwork and metadata from approved metadata services.
+7. Trigger the appropriate library scan/import so newly organized games appear automatically.
+8. Report completion, ambiguity, duplicates, or missing games back to Trevor.
+9. Later, where supported, allow commands such as "launch Pokémon Emerald on the TV" to hand the selected game to an approved Moonfin/client device.
+
+Game-management direction:
+
+- Use **Moonfin/Jellyfin** as the lightweight initial playback/client layer while the retro-gaming setup is still small.
+- When the homelab has sufficient resources and Trevor is ready to migrate, use **RomM** as the primary ROM/game library manager and metadata/catalog layer.
+- Keep Moonfin available as a Jellyfin client/player where it remains useful after RomM is introduced.
+- Treat Jarvis as the orchestration layer above the game manager rather than trying to make Moonfin itself responsible for discovery and automation.
+
+Library and safety requirements:
+
+- Support single-game requests, franchise/series requests, platform ranges, missing-game reports, duplicate detection, and collection audits.
+- Search and organize Trevor's existing files automatically, including authorized personal dumps/backups, homebrew, public-domain titles, and other legitimately available files.
+- Do not silently acquire copyrighted commercial ROMs from unauthorized sources. If a requested copyrighted game is missing, report it as missing and wait for Trevor to provide an authorized copy/import source.
+- Support a watched **Game Inbox** so a file Trevor places there can be identified, validated, renamed, moved/copied into the correct library, enriched with metadata, scanned, and made available automatically.
+- Preserve hashes and source/import history so Jarvis can explain where a library item came from and avoid duplicate imports.
+- Never replace a known-good ROM with a different region, revision, hack, or dump without approval.
+- Keep destructive file cleanup separate from normal import automation and require explicit approval before deleting originals or duplicates.
+
+Long-term experience target:
+
+Trevor should eventually be able to say what he wants in normal language and have Jarvis handle the entire legal library-management workflow: determine the intended games, inspect what is already owned, organize/import available files, update metadata, sync the game library, report anything missing, and make the result ready to play with as little manual file management as possible.
+
 ## Watch and monitoring automations
 
 Status: Future.
@@ -323,3 +371,4 @@ Status: Future.
 - Final outage timer, low-battery/runtime threshold, and minimum shutdown safety reserve after real runtime testing.
 - Exact Minecraft management method and warning intervals.
 - Final shutdown and startup dependency order for Proxmox hosts, NAS/storage, networking, VMs, containers, and application stacks.
+- Exact RomM/Moonfin integration path, game metadata providers, watched Game Inbox location, and which client devices Jarvis may launch games on.
