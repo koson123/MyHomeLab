@@ -76,6 +76,8 @@ This is the next major homelab task before broad new expansion. Follow [OPERATIN
 - [ ] Give all permanent homelab infrastructure stable IP addresses later, using documented static assignments and/or DHCP reservations as appropriate; cover Proxmox hosts, VMs/CTs, NAS devices, Raspberry Pis, network infrastructure, and other long-lived servers/services.
 - [ ] Create and maintain a documented IP/address allocation map so new infrastructure does not conflict with existing assignments.
 - [ ] Correct IPv4 and IPv6 DNS distribution to clients.
+- [ ] Give every homelab service an easy-to-remember internal website/hostname (for example, `jellyfin.internal`, `immich.internal`, or the final chosen internal domain) instead of making users and automations depend on raw IP addresses and ports.
+- [ ] Route those internal service websites through documented local DNS and the internal reverse proxy where appropriate, so a service can move to another VM, container, Proxmox node, or future replacement host by changing DNS/proxy configuration instead of changing every client and automation.
 - [ ] Design and create an `IoT Local-Only` VLAN for smart/IoT devices that do not need cloud access; block outbound Internet by default and allow only required local services such as Home Assistant, Pi-hole/DNS, NTP, and explicitly approved local endpoints.
 - [ ] Keep Internet-dependent smart/IoT devices on a separate `IoT Cloud` VLAN or equivalent policy group with outbound Internet access but isolation from trusted clients, servers, NAS devices, and management networks.
 - [ ] Document VLAN IDs, subnets, DHCP scopes, mDNS/discovery exceptions, and OPNsense firewall rules before treating the IoT segmentation as complete.
