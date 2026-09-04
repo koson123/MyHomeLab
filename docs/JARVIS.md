@@ -398,6 +398,8 @@ Names are architectural roles, not final software selections:
 - Evaluate **Qwen3.8-27B** as the leading future local multimodal Jarvis model candidate, alongside smaller fallback models, using measured latency, memory use, vision quality, tool use, and power consumption on the available hardware.
 - Do not deploy Qwen3.8-27B on the current mini-PC/XPS merely because it is available; target it for the planned AMD Ryzen AI Halo-class upgrade or other hardware that proves adequate through testing.
 - Keep the model behind an OpenAI-compatible, replaceable provider interface so Jarvis can use a smaller local model, Qwen3.8-27B, or an explicitly approved cloud model without changing the capability or policy layers.
+- **Keep-in-mind research:** track **HRM (Hierarchical Reasoning Model)**, **TRM (Tiny Recursive Model)**, HRM-Text, and related recursive/hierarchical reasoning approaches as possible low-resource reasoning specialists. Do not assume the tiny symbolic HRM/TRM models are drop-in chat replacements; evaluate them only when practical checkpoints/runtimes can be tested on Jarvis-relevant text, planning, or tool-use workloads.
+- Explore a tiered model-routing design where deterministic logic and tiny/recursive models handle bounded reasoning or routine agent work, escalating to larger Qwen-class models only when needed. Compare end-to-end RAM, CPU/GPU/NPU use, latency, accuracy, tool reliability, and integration complexity before adopting them.
 - Add natural-language interpretation, retrieval-grounded answers, summarization, multimodal understanding, and plan generation.
 - Keep typed execution and policy outside the model.
 - Evaluate latency, hallucinations, source faithfulness, and fallback behavior.
