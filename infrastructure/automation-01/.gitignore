@@ -1,0 +1,7 @@
+secrets/
+data/
+backups/
+*.env
+*.key
+*.pem
+models/

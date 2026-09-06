@@ -1,0 +1,18 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.36.9
+    container_name: automation_n8n
+    restart: unless-stopped
+    ports:
+      - "10.50.0.114:5678:5678"
+    env_file:
+      - /srv/automation/secrets/n8n.env
+    environment:
+      N8N_HOST: automation-01.local
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      N8N_WEBHOOK_URL: http://automation-01.local:5678/
+      N8N_SECURE_COOKIE: "false"
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+    volumes:
+      - /srv/automation/data/n8n:/home/node/.n8n
