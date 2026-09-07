@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web.Script.Serialization;
 
@@ -16,7 +17,8 @@ namespace GameHubSync
     {
         private static readonly ILogger Logger = LogManager.GetLogger();
         private static readonly Guid PluginGuid = Guid.Parse("7e6b7718-3a0b-4a44-bfe2-c21d88e8361a");
-        private readonly string configPath;
+        private readonly string legacyConfigPath;
+        private readonly string sharedConfigPath;
 
         public override Guid Id => PluginGuid;
 
@@ -24,8 +26,12 @@ namespace GameHubSync
         {
             var dataPath = GetPluginUserDataPath();
             Directory.CreateDirectory(dataPath);
-            configPath = Path.Combine(dataPath, "gamehub.json");
-            EnsureConfigTemplate();
+            legacyConfigPath = Path.Combine(dataPath, "gamehub.json");
+            sharedConfigPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "TrevorGameHub",
+                "client.json");
+            EnsureLegacyConfigTemplate();
         }
 
         public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
@@ -40,7 +46,7 @@ namespace GameHubSync
             yield return new MainMenuItem
             {
                 MenuSection = "@Game Hub",
-                Description = "Open Game Hub config folder",
+                Description = "Open Game Hub client folder",
                 Action = _ => OpenConfigFolder()
             };
         }
@@ -51,9 +57,7 @@ namespace GameHubSync
             {
                 var config = LoadConfig();
                 if (config.SyncOnLibraryUpdated)
-                {
                     SyncLibrary(false);
-                }
             }
             catch (Exception ex)
             {
@@ -76,10 +80,7 @@ namespace GameHubSync
                     ["games"] = games
                 };
 
-                var serializer = new JavaScriptSerializer
-                {
-                    MaxJsonLength = int.MaxValue
-                };
+                var serializer = new JavaScriptSerializer { MaxJsonLength = int.MaxValue };
                 var json = serializer.Serialize(payload);
                 var url = config.GameHubUrl.TrimEnd('/') + "/api/v1/import/playnite";
 
@@ -112,9 +113,7 @@ namespace GameHubSync
             {
                 Logger.Error(ex, "Game Hub library sync failed.");
                 if (showDialog)
-                {
                     PlayniteApi.Dialogs.ShowErrorMessage(ex.Message, "Game Hub Sync");
-                }
             }
         }
 
@@ -143,39 +142,62 @@ namespace GameHubSync
 
         private GameHubConfig LoadConfig()
         {
-            EnsureConfigTemplate();
             var serializer = new JavaScriptSerializer();
-            var json = File.ReadAllText(configPath);
-            var config = serializer.Deserialize<GameHubConfig>(json);
+            if (File.Exists(sharedConfigPath))
+            {
+                var shared = serializer.Deserialize<SharedClientConfig>(File.ReadAllText(sharedConfigPath));
+                if (shared != null)
+                {
+                    return new GameHubConfig
+                    {
+                        GameHubUrl = shared.GameHubUrl,
+                        ApiKey = Unprotect(shared.ApiKeyProtected),
+                        DeviceName = shared.DeviceName,
+                        AgentUrl = shared.AgentUrl,
+                        SyncOnLibraryUpdated = true
+                    };
+                }
+            }
+
+            EnsureLegacyConfigTemplate();
+            var config = serializer.Deserialize<GameHubConfig>(File.ReadAllText(legacyConfigPath));
             return config ?? new GameHubConfig();
+        }
+
+        private static string Unprotect(string protectedValue)
+        {
+            if (string.IsNullOrWhiteSpace(protectedValue)) return null;
+            try
+            {
+                var bytes = ProtectedData.Unprotect(
+                    Convert.FromBase64String(protectedValue),
+                    null,
+                    DataProtectionScope.CurrentUser);
+                return Encoding.UTF8.GetString(bytes);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    "Unable to decrypt the Game Hub API key. Re-run GameHubClient.exe as the same Windows user.", ex);
+            }
         }
 
         private void ValidateConfig(GameHubConfig config)
         {
             if (string.IsNullOrWhiteSpace(config.GameHubUrl))
-            {
-                throw new InvalidOperationException($"GameHubUrl is missing in {configPath}");
-            }
+                throw new InvalidOperationException("GameHubUrl is missing. Run GameHubClient.exe to configure this PC.");
 
             if (!Uri.TryCreate(config.GameHubUrl, UriKind.Absolute, out var uri) ||
                 (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
-            {
                 throw new InvalidOperationException("GameHubUrl must be an absolute http:// or https:// URL.");
-            }
 
             if (string.IsNullOrWhiteSpace(config.ApiKey) || config.ApiKey.StartsWith("replace-", StringComparison.OrdinalIgnoreCase))
-            {
-                throw new InvalidOperationException($"Set ApiKey in {configPath} before syncing.");
-            }
+                throw new InvalidOperationException("Game Hub API key is missing. Run GameHubClient.exe to configure this PC.");
         }
 
-        private void EnsureConfigTemplate()
+        private void EnsureLegacyConfigTemplate()
         {
-            if (File.Exists(configPath))
-            {
-                return;
-            }
-
+            if (File.Exists(legacyConfigPath)) return;
             var serializer = new JavaScriptSerializer();
             var example = new GameHubConfig
             {
@@ -185,13 +207,16 @@ namespace GameHubSync
                 AgentUrl = "http://gaming-pc.internal:8790",
                 SyncOnLibraryUpdated = true
             };
-            File.WriteAllText(configPath, serializer.Serialize(example));
+            File.WriteAllText(legacyConfigPath, serializer.Serialize(example));
         }
 
         private void OpenConfigFolder()
         {
-            Directory.CreateDirectory(GetPluginUserDataPath());
-            Process.Start("explorer.exe", GetPluginUserDataPath());
+            var folder = Path.GetDirectoryName(sharedConfigPath);
+            if (!Directory.Exists(folder))
+                folder = GetPluginUserDataPath();
+            Directory.CreateDirectory(folder);
+            Process.Start("explorer.exe", folder);
         }
     }
 
@@ -202,5 +227,13 @@ namespace GameHubSync
         public string DeviceName { get; set; }
         public string AgentUrl { get; set; }
         public bool SyncOnLibraryUpdated { get; set; } = true;
+    }
+
+    public class SharedClientConfig
+    {
+        public string GameHubUrl { get; set; }
+        public string ApiKeyProtected { get; set; }
+        public string DeviceName { get; set; }
+        public string AgentUrl { get; set; }
     }
 }
