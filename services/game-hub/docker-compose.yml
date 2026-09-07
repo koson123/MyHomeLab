@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gamehub
+      POSTGRES_USER: gamehub
+      POSTGRES_PASSWORD: ${GAMEHUB_DB_PASSWORD}
+    volumes:
+      - gamehub_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gamehub -d gamehub"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  gamehub:
+    build: ./app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://gamehub:${GAMEHUB_DB_PASSWORD}@db:5432/gamehub
+      GAMEHUB_API_KEY: ${GAMEHUB_API_KEY}
+      GAMEHUB_AGENT_TOKEN: ${GAMEHUB_AGENT_TOKEN}
+      GAMEHUB_ALLOWED_AGENT_HOSTS: ${GAMEHUB_ALLOWED_AGENT_HOSTS:-}
+    ports:
+      - "8787:8787"
+
+volumes:
+  gamehub_postgres:
