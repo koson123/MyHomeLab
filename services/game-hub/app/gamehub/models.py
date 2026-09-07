@@ -12,7 +12,10 @@ class GameBase(SQLModel):
     canonical_title: str = Field(index=True)
     canonical_key: str = Field(index=True, sa_column_kwargs={"unique": True})
     sort_title: Optional[str] = None
+    release_year: Optional[int] = Field(default=None, index=True)
     igdb_id: Optional[int] = Field(default=None, index=True)
+    favorite: bool = False
+    hidden: bool = False
 
 
 class Game(GameBase, table=True):
@@ -50,6 +53,9 @@ class EntitlementBase(SQLModel):
     external_product_id: Optional[str] = Field(default=None, index=True)
     edition: Optional[str] = None
     active: bool = True
+    playtime_seconds: int = 0
+    play_count: int = 0
+    last_activity: Optional[datetime] = Field(default=None, index=True)
 
 
 class Entitlement(EntitlementBase, table=True):
@@ -127,3 +133,37 @@ class LaunchResult(SQLModel):
     device_id: int
     launch_target_id: int
     detail: str
+
+
+class PlayniteGameSnapshot(SQLModel):
+    database_id: str
+    name: str
+    game_id: Optional[str] = None
+    plugin_id: Optional[str] = None
+    source: Optional[str] = None
+    platforms: list[str] = Field(default_factory=list)
+    release_year: Optional[int] = None
+    is_installed: bool = False
+    install_directory: Optional[str] = None
+    playtime_seconds: int = 0
+    play_count: int = 0
+    last_activity: Optional[datetime] = None
+    hidden: bool = False
+    favorite: bool = False
+    sorting_name: Optional[str] = None
+
+
+class PlayniteSnapshot(SQLModel):
+    device_name: str
+    agent_url: Optional[str] = None
+    games: list[PlayniteGameSnapshot]
+
+
+class ImportResult(SQLModel):
+    provider: str
+    device_id: int
+    games_received: int
+    games_created: int
+    entitlements_created: int
+    installations_upserted: int
+    launch_targets_upserted: int

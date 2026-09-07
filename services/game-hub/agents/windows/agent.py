@@ -10,11 +10,11 @@ AGENT_TOKEN = os.getenv("GAMEHUB_AGENT_TOKEN", "")
 DRY_RUN = os.getenv("GAMEHUB_AGENT_DRY_RUN", "true").lower() not in {"0", "false", "no"}
 ALLOWED_SCHEMES = {
     scheme.strip().lower()
-    for scheme in os.getenv("GAMEHUB_AGENT_ALLOWED_SCHEMES", "steam").split(",")
+    for scheme in os.getenv("GAMEHUB_AGENT_ALLOWED_SCHEMES", "steam,playnite").split(",")
     if scheme.strip()
 }
 
-app = FastAPI(title="Game Hub Windows Agent", version="0.1.0")
+app = FastAPI(title="Game Hub Windows Agent", version="0.2.0")
 
 
 class LaunchCommand(BaseModel):
@@ -50,7 +50,7 @@ def health() -> dict:
     return {
         "status": "ok",
         "service": "game-hub-windows-agent",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "platform": platform.system(),
         "dry_run": DRY_RUN,
         "allowed_schemes": sorted(ALLOWED_SCHEMES),

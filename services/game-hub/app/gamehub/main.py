@@ -1,5 +1,7 @@
 import hmac
 import os
+import re
+from datetime import datetime, timezone
 from typing import Annotated
 from urllib.parse import urlparse
 
@@ -14,12 +16,14 @@ from .models import (
     EntitlementCreate,
     Game,
     GameCreate,
+    ImportResult,
     Installation,
     InstallationCreate,
     LaunchRequest,
     LaunchResult,
     LaunchTarget,
     LaunchTargetCreate,
+    PlayniteSnapshot,
     ProviderAccount,
     ProviderAccountCreate,
 )
@@ -39,7 +43,7 @@ engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True, connect_arg
 
 app = FastAPI(
     title="Trevor Game Hub",
-    version="0.1.0",
+    version="0.2.0",
     description="Self-hosted game catalog, provider, device, and launch control plane.",
 )
 
@@ -64,9 +68,47 @@ def require_api_key(x_gamehub_key: Annotated[str | None, Header()] = None) -> No
 ApiAuth = Depends(require_api_key)
 
 
+def canonical_key_for_title(title: str, release_year: int | None, fallback: str) -> str:
+    key = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
+    if not key:
+        return fallback.lower()
+    if release_year:
+        return f"{key}-{release_year}"
+    return key
+
+
+def normalize_playnite_source(source: str | None) -> str:
+    value = (source or "").strip().lower()
+    if not value:
+        return "playnite"
+    if "steam" in value:
+        return "steam"
+    if "epic" in value:
+        return "epic"
+    if value == "gog" or "gog.com" in value:
+        return "gog"
+    if "xbox" in value or "microsoft" in value:
+        return "xbox"
+    if "playstation" in value or value == "psn":
+        return "playstation"
+    if "nintendo" in value:
+        return "nintendo"
+    if value in {"ea", "ea app", "origin"} or value.startswith("ea "):
+        return "ea"
+    if "ubisoft" in value or "uplay" in value:
+        return "ubisoft"
+    if "battle.net" in value or "battlenet" in value:
+        return "battlenet"
+    if "amazon" in value:
+        return "amazon"
+    if "itch" in value:
+        return "itch"
+    return "playnite"
+
+
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "service": "game-hub", "version": "0.1.0"}
+    return {"status": "ok", "service": "game-hub", "version": "0.2.0"}
 
 
 @app.get("/api/v1/providers", dependencies=[ApiAuth])
@@ -81,9 +123,174 @@ def sync_provider(provider: str) -> dict:
         raise HTTPException(status_code=404, detail="Unknown provider")
     if provider == "manual":
         return {"provider": provider, "status": "noop", "detail": "Manual provider has nothing to scan"}
+    if provider == "playnite":
+        return {
+            "provider": provider,
+            "status": "push",
+            "detail": "Playnite sync is push-based; use POST /api/v1/import/playnite from the Playnite bridge",
+        }
     raise HTTPException(
         status_code=501,
         detail=f"{definition.name} scanner is not implemented yet; provider contract is reserved",
+    )
+
+
+@app.post("/api/v1/import/playnite", response_model=ImportResult, dependencies=[ApiAuth])
+def import_playnite(snapshot: PlayniteSnapshot, session: Session = Depends(get_session)) -> ImportResult:
+    now = datetime.now(timezone.utc)
+    device = session.exec(select(Device).where(Device.name == snapshot.device_name)).first()
+    if device is None:
+        device = Device(
+            name=snapshot.device_name,
+            kind="pc",
+            os="Windows",
+            agent_url=snapshot.agent_url,
+            last_seen_at=now,
+        )
+        session.add(device)
+        session.flush()
+    else:
+        if snapshot.agent_url:
+            device.agent_url = snapshot.agent_url
+        device.last_seen_at = now
+        session.add(device)
+        session.flush()
+
+    games_created = 0
+    entitlements_created = 0
+    installations_upserted = 0
+    launch_targets_upserted = 0
+
+    for item in snapshot.games:
+        canonical_key = canonical_key_for_title(
+            item.name,
+            item.release_year,
+            f"playnite-{item.database_id}",
+        )
+        game = session.exec(select(Game).where(Game.canonical_key == canonical_key)).first()
+        if game is None:
+            game = Game(
+                canonical_title=item.name,
+                canonical_key=canonical_key,
+                sort_title=item.sorting_name,
+                release_year=item.release_year,
+                favorite=item.favorite,
+                hidden=item.hidden,
+            )
+            session.add(game)
+            session.flush()
+            games_created += 1
+        else:
+            if item.sorting_name and not game.sort_title:
+                game.sort_title = item.sorting_name
+            if item.release_year and not game.release_year:
+                game.release_year = item.release_year
+            game.favorite = game.favorite or item.favorite
+            game.updated_at = now
+            session.add(game)
+
+        provider = normalize_playnite_source(item.source)
+        external_product_id = item.game_id or item.database_id
+        platform = " | ".join(item.platforms) if item.platforms else None
+
+        entitlement = session.exec(
+            select(Entitlement).where(
+                Entitlement.game_id == game.id,
+                Entitlement.provider == provider,
+                Entitlement.external_product_id == external_product_id,
+            )
+        ).first()
+        if entitlement is None:
+            entitlement = Entitlement(
+                game_id=game.id,
+                provider=provider,
+                platform=platform,
+                ownership_type="library_access",
+                external_product_id=external_product_id,
+                active=True,
+                playtime_seconds=item.playtime_seconds,
+                play_count=item.play_count,
+                last_activity=item.last_activity,
+            )
+            session.add(entitlement)
+            entitlements_created += 1
+        else:
+            entitlement.platform = platform
+            entitlement.active = True
+            entitlement.playtime_seconds = item.playtime_seconds
+            entitlement.play_count = item.play_count
+            entitlement.last_activity = item.last_activity
+            entitlement.updated_at = now
+            session.add(entitlement)
+
+        installation = session.exec(
+            select(Installation).where(
+                Installation.game_id == game.id,
+                Installation.device_id == device.id,
+                Installation.provider == provider,
+                Installation.external_product_id == item.database_id,
+            )
+        ).first()
+        if installation is None:
+            installation = Installation(
+                game_id=game.id,
+                device_id=device.id,
+                provider=provider,
+                status="installed" if item.is_installed else "not_installed",
+                external_product_id=item.database_id,
+                install_path=item.install_directory,
+            )
+            session.add(installation)
+        else:
+            installation.status = "installed" if item.is_installed else "not_installed"
+            installation.install_path = item.install_directory
+            installation.detected_at = now
+            session.add(installation)
+        installations_upserted += 1
+
+        launch_ref = f"playnite://playnite/start/{item.database_id}"
+        launch_target = session.exec(
+            select(LaunchTarget).where(
+                LaunchTarget.game_id == game.id,
+                LaunchTarget.device_id == device.id,
+                LaunchTarget.method == "agent",
+                LaunchTarget.launch_ref == launch_ref,
+            )
+        ).first()
+
+        if item.is_installed:
+            if launch_target is None:
+                launch_target = LaunchTarget(
+                    game_id=game.id,
+                    device_id=device.id,
+                    provider=provider,
+                    capability="full",
+                    method="agent",
+                    launch_ref=launch_ref,
+                    enabled=True,
+                )
+                session.add(launch_target)
+            else:
+                launch_target.provider = provider
+                launch_target.capability = "full"
+                launch_target.enabled = True
+                session.add(launch_target)
+            launch_targets_upserted += 1
+        elif launch_target is not None and launch_target.enabled:
+            launch_target.enabled = False
+            session.add(launch_target)
+            launch_targets_upserted += 1
+
+    session.commit()
+
+    return ImportResult(
+        provider="playnite",
+        device_id=device.id,
+        games_received=len(snapshot.games),
+        games_created=games_created,
+        entitlements_created=entitlements_created,
+        installations_upserted=installations_upserted,
+        launch_targets_upserted=launch_targets_upserted,
     )
 
 
