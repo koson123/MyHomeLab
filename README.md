@@ -25,6 +25,7 @@ The immediate next task is a live infrastructure audit, beginning with the Proxm
 - [Roadmap](docs/ROADMAP.md) — ordered backlog and longer-term projects
 - [Automations roadmap](docs/AUTOMATIONS_ROADMAP.md) — personal, Home Assistant, content, and homelab automations
 - [Jarvis and proactive AI](docs/JARVIS.md) — assistant architecture, capabilities, proactive behavior, trusted Gospel content, permissions, and implementation phases
+- [Game Hub](docs/GAME_HUB.md) — unified modern/retro game catalog, account scanning, device inventory, and launch orchestration
 - [Runbook](docs/RUNBOOK.md) — safe operating and troubleshooting procedures
 - [Decisions](docs/DECISIONS.md) — decisions that should not be repeatedly revisited
 
