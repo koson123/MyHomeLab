@@ -67,6 +67,7 @@ Mom's services and storage should stay grouped so they can be moved later. Gus's
 - Frigate
 - WorkAdventure
 - Nextcloud
+- Octo-Fiesta music integration: planned Subsonic/OpenSubsonic proxy in front of Navidrome for local-first search/playback plus approved external-provider streaming/downloads; keep Navidrome read-only, give Octo-Fiesta only a dedicated writable import path, and do not rely on deprecated SquidWTF. See [OCTO_FIESTA.md](OCTO_FIESTA.md).
 - Homelab Jarvis core and proactive AI services in planned `mini-llm` VM; detailed plan in [JARVIS.md](JARVIS.md)
 - Local model runtime as a replaceable Jarvis component
 - Trusted local Gospel Content Library and search index sourced from official Church content
