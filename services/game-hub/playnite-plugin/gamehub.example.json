@@ -1,0 +1,7 @@
+{
+  "GameHubUrl": "http://gamehub.internal:8787",
+  "ApiKey": "replace-with-gamehub-api-key",
+  "DeviceName": "Gaming-PC",
+  "AgentUrl": "http://gaming-pc.internal:8790",
+  "SyncOnLibraryUpdated": true
+}
