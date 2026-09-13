@@ -100,7 +100,7 @@ This is the next major homelab task before broad new expansion. Follow [OPERATIN
 - [ ] Vaultwarden
 - [ ] LibreCloset
 - [ ] Price Ghost
-- [ ] Workout/fitness app
+- [ ] Deploy and evaluate [openGym](https://github.com/DuarteSantos8/openGym) as the primary self-hosted workout/fitness tracker; use Docker Compose, configure HTTPS/passkeys for phone access, back up its data, and plan later Jarvis/automation integration for workout delivery and progress data.
 - [ ] Nutrition/macro tracker
 - [ ] Frigate and local cameras
 - [ ] WorkAdventure
