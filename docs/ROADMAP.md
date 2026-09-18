@@ -97,6 +97,7 @@ This is the next major homelab task before broad new expansion. Follow [OPERATIN
 
 ## Phase 6 — planned applications
 
+- [ ] Deploy [RackPeek](https://github.com/Timmoth/RackPeek) as the central homelab infrastructure documentation/inventory service; use it to document hardware, services, networks, and relationships, keep its YAML configuration backed up/versioned, and later evaluate its Ansible inventory generator once the live inventory is reconciled.
 - [ ] Vaultwarden
 - [ ] LibreCloset
 - [ ] Price Ghost
