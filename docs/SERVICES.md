@@ -58,6 +58,7 @@ Mom's services and storage should stay grouped so they can be moved later. Gus's
 
 ## Future applications
 
+- RackPeek: planned self-hosted infrastructure documentation/inventory service for hardware, services, networks, and relationships; retain and back up its YAML state and later evaluate its Ansible inventory generator after the live homelab inventory is reconciled.
 - Komga (immediate)
 - Vaultwarden
 - LibreCloset
