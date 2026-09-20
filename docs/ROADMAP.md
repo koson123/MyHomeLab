@@ -185,6 +185,14 @@ Jarvis begins as an independent homelab assistant so it can be useful long befor
 
 Implement the detailed architecture and phased plan in [JARVIS.md](JARVIS.md).
 
+- [ ] **Pilot [vierisid/jarvis](https://github.com/vierisid/jarvis) as a possible foundation for the homelab Jarvis before rebuilding equivalent functionality from scratch.** Research review (2026-09-20): promising and highly aligned, but keep adoption provisional because the project is still pre-1.0 (latest reviewed release v0.13.7) and uses the Jarvis Source Available License 2.0 rather than a standard OSI open-source license.
+  - Test its always-on daemon, authenticated sidecars, desktop/browser/terminal reach, wake-word/voice path, memory, multi-agent delegation, workflow engine, goals, authority gates, audit trail, kill controls, and Ollama/local-LLM support against our existing requirements.
+  - Run the brain only on LAN/VPN behind the internal reverse proxy with TLS; do not use `auth.insecure_open_access` except briefly on an isolated setup path.
+  - Disable both brain and sidecar telemetry during the homelab pilot unless Trevor explicitly chooses otherwise.
+  - Treat sidecar permissions as privileged access: begin read-only/minimal-capability and expand only after approval, logging, revocation, and recovery are verified.
+  - Compare its authority model with our typed-capability/policy design; keep our stricter approval rules for networking, VM lifecycle, security, deployments, destructive file actions, and other high-impact homelab changes.
+  - Verify Home Assistant, n8n, Immich, media, homelab-status, notification, Gospel-library, and future Ansible/Proxmox integration paths before deciding whether to adopt, fork/modify for private use, or use only selected ideas.
+  - Review the source-available license before any redistribution, hosted access for third parties, or incorporation into Ecosystem OS; private personal homelab use is the intended evaluation scope.
 - [ ] Build Jarvis as a modular homelab service in the planned 100 GB `mini-llm` VM.
 - [ ] Start with an authenticated deterministic core, typed capabilities, policy/approvals, audit logs, dashboard, and kill switch.
 - [ ] Connect Home Assistant, the Personal Morning Delivery Hub, Immich, notifications, workouts, music/media, and read-only homelab status in controlled phases.
