@@ -362,6 +362,33 @@ Names are architectural roles, not final software selections:
 
 ## Implementation phases
 
+### Upstream foundation candidate — vierisid/jarvis
+
+Before implementing J0/J1 from scratch, run a bounded evaluation of [vierisid/jarvis](https://github.com/vierisid/jarvis).
+
+Why it is worth evaluating:
+- Its architecture closely matches this design: a persistent server-side brain plus authenticated desktop sidecars.
+- It already includes desktop/browser/terminal/filesystem reach, screen awareness, memory, multi-agent delegation, visual workflows, goals, voice/wake word, provider routing including Ollama, runtime authority gates, approvals, audit history, and emergency pause/kill controls.
+- It is actively developed and was at v0.13.7 in the 2026-09-20 review, with recent repository activity and CI.
+- Self-hosting supports JWT device enrollment and reverse-proxy TLS, which fits the LAN/VPN-first homelab exposure policy.
+
+Reasons not to adopt it blindly:
+- It is still pre-1.0 and therefore should be treated as evolving software.
+- The repository uses the Jarvis Source Available License 2.0 (RSALv2-based), not a conventional OSI open-source license. Personal/private evaluation and modification are useful here, but redistribution, third-party service exposure, and a future Ecosystem OS integration need a fresh license review.
+- Its sidecars can expose very powerful machine capabilities, so default permissions must be reduced during testing.
+- Brain telemetry is enabled by default, and sidecar telemetry has a separate opt-out; both should be disabled for the initial private homelab pilot.
+- Our typed capability definitions, risk levels, explicit previews, rollback requirements, and infrastructure safeguards remain the policy source of truth even if this project becomes the runtime foundation.
+
+Pilot exit criteria:
+1. Deploy an isolated instance without replacing the existing automation stack.
+2. Use local/Ollama inference first where practical and measure RAM, CPU, latency, and reliability.
+3. Enroll one Windows PC sidecar with the minimum useful permissions and prove revocation works.
+4. Verify TLS/reverse proxy, authentication, audit trail, approvals, emergency pause, backup/restore, and update behavior.
+5. Prototype one Home Assistant read-only tool, one homelab-status tool, and one harmless approval-gated action.
+6. Evaluate its workflow engine versus n8n: keep n8n where deterministic automation is already better rather than duplicating everything.
+7. Test a small multi-agent maker/reviewer task and verify sub-agents cannot bypass top-level authority.
+8. Decide **adopt as foundation**, **private fork/modify**, **use selected components/patterns**, or **reject and continue custom build** based on measured results.
+
 ### J0 — decisions and contracts
 
 - Define the initial three user-facing use cases.
