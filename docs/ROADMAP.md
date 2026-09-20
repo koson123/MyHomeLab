@@ -97,7 +97,13 @@ This is the next major homelab task before broad new expansion. Follow [OPERATIN
 
 ## Phase 6 — planned applications
 
-- [ ] Deploy [RackPeek](https://github.com/Timmoth/RackPeek) as the central homelab infrastructure documentation/inventory service; use it to document hardware, services, networks, and relationships, keep its YAML configuration backed up/versioned, and later evaluate its Ansible inventory generator once the live inventory is reconciled.
+- [ ] Deploy [RackPeek](https://github.com/Timmoth/RackPeek) as the central homelab infrastructure documentation/inventory service. Research decision (2026-09-20): **approved for staged deployment** because RackPeek 2.x is purpose-built for homelab inventory, keeps state in portable YAML, supports Git sync, topology/network visualisation, API-key-protected inventory updates, and Ansible/hosts/SSH inventory exports.
+  - Keep RackPeek **LAN/VPN-only** behind the existing internal reverse-proxy/access model rather than exposing the UI directly to the public Internet.
+  - Use a bind-mounted config directory so its YAML can be backed up and version-controlled; RackPeek should complement the GitHub documentation rather than become the only copy of infrastructure knowledge.
+  - Populate it only after the current live inventory/reconciliation pass so incorrect historical data is not imported as truth.
+  - After initial population, test topology, subnet browsing, Git sync, exports, and the Ansible inventory generator against a small subset before using generated inventory operationally.
+  - Treat YAML imports cautiously until upstream issue #308 (connection information being silently dropped during some YAML imports in v2.0.0) is resolved or verified fixed in the deployed release.
+  - Validate reverse-proxy behavior before making the internal hostname permanent because recent upstream issues have reported reverse-proxy/HTTPS problems.
 - [ ] Vaultwarden
 - [ ] LibreCloset
 - [ ] Price Ghost
