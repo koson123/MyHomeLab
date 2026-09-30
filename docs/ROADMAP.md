@@ -1,5 +1,11 @@
 # Roadmap
 
+## Next task — Raspberry Pi as a Proxmox node
+
+- [ ] Check an unofficial Raspberry Pi 5 Proxmox port (PiMox or a compatible maintained alternative) against the versions on the existing Proxmox nodes and the Pi's Debian installation.
+- [ ] Back up `automation-01` and its existing services/configuration before changing the host.
+- [ ] If compatibility is confirmed, install the compatible port on the Raspberry Pi 5 and join it to the existing Proxmox cluster; verify networking, existing services, and ARM guest operation. Existing Intel/AMD guests cannot migrate onto the ARM Pi.
+
 ## Immediate next session — full server reconciliation and operating workflow
 
 This is the next major homelab task before broad new expansion. Follow [OPERATING_WORKFLOW.md](OPERATING_WORKFLOW.md) so the repository, rather than conversation memory, becomes the durable source of truth.
