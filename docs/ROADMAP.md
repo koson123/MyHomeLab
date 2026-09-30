@@ -141,7 +141,7 @@ Treat Moonfin retro gaming as the initial experiment, not the permanent game-lib
 
 Implement this only after the homelab architecture, addressing, service placement, storage, and backup strategy are stable enough that automation will not be constantly rewritten.
 
-- [ ] Establish an Ansible control node for centralized homelab administration.
+- [ ] When Trevor has the chance, install Ansible on the Raspberry Pi 5 (`automation-01`) and use it as the control node for centralized homelab administration.
 - [ ] Keep inventories, playbooks, roles, templates, and non-secret configuration under Git version control.
 - [ ] Group managed systems by role, including Proxmox hosts, Mini-PC VMs/containers, XPS VMs, Raspberry Pis, networking/services, media, games, and experimental nodes.
 - [ ] Automate Linux package updates and routine maintenance across supported nodes.
