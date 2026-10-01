@@ -1,0 +1,47 @@
+name: Build Game Hub Windows client
+
+on:
+  push:
+    branches:
+      - feature/game-hub-foundation
+    paths:
+      - 'services/game-hub/windows-client/**'
+      - 'services/game-hub/playnite-plugin/**'
+      - '.github/workflows/game-hub-windows-client.yml'
+  pull_request:
+    paths:
+      - 'services/game-hub/windows-client/**'
+      - 'services/game-hub/playnite-plugin/**'
+      - '.github/workflows/game-hub-windows-client.yml'
+
+jobs:
+  build-windows-client:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Playnite plugin
+        run: dotnet restore services/game-hub/playnite-plugin/GameHubSync.csproj
+
+      - name: Build Playnite plugin
+        run: dotnet build services/game-hub/playnite-plugin/GameHubSync.csproj -c Release --no-restore
+
+      - name: Publish single-file Windows client
+        run: dotnet publish services/game-hub/windows-client/GameHubClient.csproj -c Release -r win-x64 --self-contained true
+
+      - name: Verify executable
+        shell: pwsh
+        run: |
+          $exe = 'services/game-hub/windows-client/bin/Release/net8.0-windows/win-x64/publish/GameHubClient.exe'
+          if (-not (Test-Path $exe)) { throw "GameHubClient.exe was not produced" }
+          Get-Item $exe | Format-List FullName,Length,LastWriteTime
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GameHubClient-win-x64
+          path: services/game-hub/windows-client/bin/Release/net8.0-windows/win-x64/publish/GameHubClient.exe
+          if-no-files-found: error
