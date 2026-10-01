@@ -1,10 +1,14 @@
 # Roadmap
 
-## Next task — Raspberry Pi as a Proxmox node
+## Raspberry Pi Proxmox node — joined 2026-09-30
 
-- [ ] Check an unofficial Raspberry Pi 5 Proxmox port (PiMox or a compatible maintained alternative) against the versions on the existing Proxmox nodes and the Pi's Debian installation.
-- [ ] Back up `automation-01` and its existing services/configuration before changing the host.
-- [ ] If compatibility is confirmed, install the compatible port on the Raspberry Pi 5 and join it to the existing Proxmox cluster; verify networking, existing services, and ARM guest operation. Existing Intel/AMD guests cannot migrate onto the ARM Pi.
+- [x] Verify the Raspberry Pi 5 runs Debian 13 ARM64; install the PXVIRT community port (`pve-manager/9.0.10-2`). The XPS runs Proxmox VE 9.2.4; cluster join and quorum are verified, but broader cross-version/fork compatibility has not been established.
+- [x] Back up the automation data, configuration, and Discord bot image; copy the backup off the Pi to Trevor's Windows PC.
+- [x] Rename `automation-01` to `pve-pi`, configure static `10.50.0.114/24` on `vmbr0` with gateway `10.50.0.1`, and join the `HomeLab` cluster alongside `pve-mini` (`10.50.0.2`) and `pve-xps` (`10.50.0.10`). Supplied `pvecm` output confirms all three nodes/votes and quorum of two.
+- [x] Switch to the 4 KB Raspberry Pi kernel (`6.18.39+rpt-rpi-v8`), prevent cloud-init from rewriting hostname resolution, and switch iptables/ip6tables alternatives to nft variants to restore Docker. n8n, Ollama, and the Discord bot are running on the Pi host.
+- [x] Confirm `/dev/kvm` exists; hardware-accelerated ARM guest boot has not yet been tested.
+- [ ] Boot and verify a small ARM64 guest, including guest networking and shutdown/start behavior. Existing Intel/AMD guests cannot migrate onto the ARM Pi.
+- [ ] Verify hostname resolution, bridge networking, Docker services, and cluster rejoin after a final reboot with the completed configuration.
 
 ## Immediate next session — full server reconciliation and operating workflow
 
@@ -147,7 +151,7 @@ Treat Moonfin retro gaming as the initial experiment, not the permanent game-lib
 
 Implement this only after the homelab architecture, addressing, service placement, storage, and backup strategy are stable enough that automation will not be constantly rewritten.
 
-- [ ] When Trevor has the chance, install Ansible on the Raspberry Pi 5 (`automation-01`) and use it as the control node for centralized homelab administration.
+- [ ] When Trevor has the chance, install Ansible on the Raspberry Pi 5 (`pve-pi`, formerly `automation-01`) and use it as the control node for centralized homelab administration.
 - [ ] Keep inventories, playbooks, roles, templates, and non-secret configuration under Git version control.
 - [ ] Group managed systems by role, including Proxmox hosts, Mini-PC VMs/containers, XPS VMs, Raspberry Pis, networking/services, media, games, and experimental nodes.
 - [ ] Automate Linux package updates and routine maintenance across supported nodes.
