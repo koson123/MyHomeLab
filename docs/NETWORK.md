@@ -36,6 +36,10 @@ No VLAN ID or subnet is assigned yet; select and document them when the OPNsense
 | `192.168.40.67` | `pve-mini` management address | Verified |
 | `192.168.40.252` | `mini-mom` / VM 101 | Verified |
 | `10.50.0.2` | `pve-mini` HomeLab-side address | Verified |
+| `10.50.0.10` | `pve-xps` | Verified cluster address |
+| `10.50.0.114` | `pve-pi`; Proxmox UI `:8006` | Verified static on `vmbr0` |
+| `10.50.0.200` | VM 104 `pi-automation`; n8n `:5678` | Verified DHCP; MAC `BC:24:11:2A:D8:6E`; reservation pending |
+| `10.50.0.119` | VM 105 `pi-llm`; Ollama `:11434` | Verified DHCP; MAC `BC:24:11:F3:00:E8`; intentionally stopped; reservation pending |
 | `10.50.0.113` | Jellyfin/media SMB share | Verified by mounts |
 | `10.50.0.118` | `mini-games` / VM 107 | Verified via guest agent |
 | `10.50.0.126` | `xps-media` | Verified |
@@ -48,6 +52,10 @@ No VLAN ID or subnet is assigned yet; select and document them when the OPNsense
 | `72.12.254.124` | Public address returned for `gardnergate.cc` subdomains | Observed 2026-08 |
 
 Add DHCP reservations for infrastructure before treating addresses as permanent.
+
+## Pi addressing and recovery
+
+The Pi host resolves `pve-pi` to `10.50.0.114` in `/etc/hosts`; cloud-init is configured to preserve hostname and not manage that file. Guest addresses `.200` and `.119` must be reserved before treating them as permanent. Ollama was reachable from VM 104 at `http://10.50.0.119:11434`; client configuration changes are not yet confirmed. These are internal endpoints; no public proxy deployment is recorded.
 
 ## DNS and reverse proxy
 

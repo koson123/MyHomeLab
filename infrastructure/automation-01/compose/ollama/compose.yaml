@@ -1,13 +1,21 @@
+# Sanitized example for VM 105 pi-llm (10.50.0.119), intentionally stopped when unused.
 services:
   ollama:
     image: ollama/ollama:0.33.2
     container_name: automation_ollama
     restart: unless-stopped
     ports:
-      - "10.50.0.114:11434:11434"
+      - "11434:11434"
     environment:
       OLLAMA_KEEP_ALIVE: "0"
       OLLAMA_NUM_PARALLEL: "1"
     volumes:
       - /srv/automation/data/ollama:/root/.ollama
     cpus: 3.5
+    mem_limit: 3g
+    memswap_limit: 3g
+    deploy:
+      resources:
+        limits:
+          cpus: "3.5"
+          memory: 3g

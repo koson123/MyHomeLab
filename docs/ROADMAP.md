@@ -1,14 +1,41 @@
 # Roadmap
 
-## Raspberry Pi Proxmox node — joined 2026-09-30
+Last targeted update: October 1, 2026 (America/Denver). Pi migration evidence is current; other audit items retain their earlier evidence dates.
 
-- [x] Verify the Raspberry Pi 5 runs Debian 13 ARM64; install the PXVIRT community port (`pve-manager/9.0.10-2`). The XPS runs Proxmox VE 9.2.4; cluster join and quorum are verified, but broader cross-version/fork compatibility has not been established.
-- [x] Back up the automation data, configuration, and Discord bot image; copy the backup off the Pi to Trevor's Windows PC.
-- [x] Rename `automation-01` to `pve-pi`, configure static `10.50.0.114/24` on `vmbr0` with gateway `10.50.0.1`, and join the `HomeLab` cluster alongside `pve-mini` (`10.50.0.2`) and `pve-xps` (`10.50.0.10`). Supplied `pvecm` output confirms all three nodes/votes and quorum of two.
-- [x] Switch to the 4 KB Raspberry Pi kernel (`6.18.39+rpt-rpi-v8`), prevent cloud-init from rewriting hostname resolution, and switch iptables/ip6tables alternatives to nft variants to restore Docker. n8n, Ollama, and the Discord bot are running on the Pi host.
-- [x] Confirm `/dev/kvm` exists; hardware-accelerated ARM guest boot has not yet been tested.
-- [ ] Boot and verify a small ARM64 guest, including guest networking and shutdown/start behavior. Existing Intel/AMD guests cannot migrate onto the ARM Pi.
-- [ ] Verify hostname resolution, bridge networking, Docker services, and cluster rejoin after a final reboot with the completed configuration.
+## Next bounded tasks and back-burner priorities
+
+1. **Pi recovery protection:** create a fresh post-split VM 104 backup, copy both VM archives off the Pi, and test an isolated restore. Preserve the original pre-migration backup.
+2. **Pi acceptance checks:** reserve DHCP addresses `.200` and `.119`; verify VM 105 `onboot=0`, VM 104 autostart, SSD mount, guest agent, `pvestatd`, and cluster membership after a controlled final host reboot.
+3. **Broader backup gaps:** verify the PBS laptop/datastore and schedules for all three nodes; protect Nova RAID 0 with a second copy; add application/database backups and restore tests.
+4. **Monitoring:** test a notification channel and add hosts, DNS, NAS, backup jobs, Pi storage, and n8n. Treat stopped `pi-llm` as intentional, not an outage.
+5. **Ansible:** install a control environment on the Pi when time permits; recommended placement is VM 104 rather than the virtualization host. Begin with inventory/check mode, then staged update playbooks with health checks.
+6. **Remote access:** reconcile the actual WireGuard setup, test from outside the LAN, then enforce the intended admin-access policy.
+7. **Finish restoration:** Komga on `xps-media`, remaining temporary mounts, and safe use of unused XPS guest LVM space after backups.
+8. **Infrastructure documentation:** RackPeek pilot after inventory reconciliation; Git remains the source of truth.
+9. **Personal automation:** first manually tested morning motivation/guitar delivery, then workout/briefing/acknowledgement and iPhone Share Sheet to Immich.
+10. **Later projects:** Life apps, IoT VLANs, UPS/NUT recovery, Frigate, WorkAdventure, music integrations, RomM, and the full Jarvis capability layer. Paid Gluetun remains postponed by Trevor's decision.
+
+Crafty login/lockout usability remains unresolved; investigate credentials, sessions, and supported settings while retaining authentication. Ollama is tested but intentionally stopped until a real workload needs it; active consumers have not been confirmed.
+
+## Raspberry Pi Proxmox node — migration complete, acceptance checks pending
+
+- [x] Verify Debian 13 ARM64 and install the PXVIRT community port (`pve-manager/9.0.10-2`); broader cross-version/fork compatibility remains unestablished.
+- [x] Back up original automation data/configuration and the custom Discord bot image; retain an off-Pi Windows copy.
+- [x] Rename `automation-01` to `pve-pi`; static `10.50.0.114/24` on `vmbr0`, gateway `10.50.0.1`; join HomeLab with `pve-mini` and `pve-xps`, three votes/quorum two verified.
+- [x] Select the 4 KB `6.18.39+rpt-rpi-v8` kernel, protect hostname resolution from cloud-init, and verify ARM hardware virtualization and guest shutdown/start/networking.
+- [x] Keep OS boot on microSD; format the entire Kingston 480 GB SSD as one ext4 partition and register `pi-ssd` with a mountpoint check.
+- [x] Move n8n and Discord bot into Debian 13 ARM64 VM 104 `pi-automation` (`.200`), preserving data/configuration/images and verifying services work.
+- [x] Move Ollama/model data into VM 105 `pi-llm` (`.119`); verify `qwen3:1.7b` inference and API connectivity from VM 104.
+- [x] Remove the former Ollama container/data/Compose directory from VM 104; remove Docker packages and old application directories from the Pi host.
+- [x] Create successful local SSD VM 104 and VM 105 backup archives; VM 104's archive predates the split.
+- [x] Restore `pvestatd` to active; stop VM 105 intentionally to conserve RAM.
+- [ ] Verify VM 105 autostart disabled and identify/update actual LLM consumers before relying on the new endpoint.
+- [ ] Reserve VM 104/105 DHCP addresses; verify current resource settings and guest-agent status.
+- [ ] Create a fresh VM 104 backup, copy guest archives off-device, and test an isolated restore.
+- [ ] Verify final host reboot recovery: hostname, SSD mount, bridge, quorum, status daemon, VM 104/services, and intentional VM 105 shutdown.
+- [ ] Investigate recurring PXVIRT `qm` uninitialized-value warnings using logs/version evidence before patching packages.
+
+See [PI_PROXMOX.md](PI_PROXMOX.md) for exact paths and checks. Intel/AMD guests cannot be hardware-accelerated on the ARM Pi.
 
 ## Immediate next session — full server reconciliation and operating workflow
 
@@ -30,7 +57,7 @@ This is the next major homelab task before broad new expansion. Follow [OPERATIN
 
 - [ ] Later, when Trevor is ready to pay for a VPN, deploy Gluetun and prove qBittorrent has no network access when the VPN is down.
 - [ ] Create a second protected copy of Nova NAS data; its current two-disk RAID 0 loses everything if either drive fails.
-- [ ] Install Proxmox Backup Server and schedule backups for both nodes.
+- [ ] Verify/install Proxmox Backup Server as needed and schedule backups for all three cluster nodes.
 - [ ] Create a Home Assistant backup before installing pending updates.
 - [ ] Add current off-VM backups for Paperless, Actual, Mealie, NPM, Crafty worlds, ARR configs, and media-service configs.
 - [ ] Assign stable DHCP reservations/static addresses to infrastructure.
@@ -151,7 +178,7 @@ Treat Moonfin retro gaming as the initial experiment, not the permanent game-lib
 
 Implement this only after the homelab architecture, addressing, service placement, storage, and backup strategy are stable enough that automation will not be constantly rewritten.
 
-- [ ] When Trevor has the chance, install Ansible on the Raspberry Pi 5 (`pve-pi`, formerly `automation-01`) and use it as the control node for centralized homelab administration.
+- [ ] When Trevor has the chance, install Ansible on the Pi; recommended control-node placement is `pi-automation` VM 104 so `pve-pi` stays a virtualization host. Establish inventory, update playbooks, scheduling, and post-change checks separately; installation alone does not automate updates.
 - [ ] Keep inventories, playbooks, roles, templates, and non-secret configuration under Git version control.
 - [ ] Group managed systems by role, including Proxmox hosts, Mini-PC VMs/containers, XPS VMs, Raspberry Pis, networking/services, media, games, and experimental nodes.
 - [ ] Automate Linux package updates and routine maintenance across supported nodes.

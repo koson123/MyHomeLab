@@ -4,10 +4,13 @@
 
 ### Virtualization and host roles
 
-- Use Proxmox on the mini PC and Dell XPS.
+- Use Proxmox on the mini PC and Dell XPS; `pve-pi` joined HomeLab using the community PXVIRT ARM port on September 30, 2026.
 - Use the old laptop as dedicated Proxmox Backup Server.
 - Keep containers as containers where practical; use VMs for isolation and portability.
-- Use OVMF/UEFI, Q35, QEMU guest agent, and SSD discard for normal VM builds.
+- Use OVMF/UEFI, QEMU guest agent, and SSD discard for normal VM builds; Q35 applies to x86, while ARM guests use their supported ARM machine configuration.
+- Pi host boots from microSD; dedicate the whole 480 GB USB SSD to VM/storage use, not host boot.
+- Keep the Pi host for virtualization; n8n and the Discord bot run in VM 104, Ollama separately in VM 105.
+- Keep Ollama stopped when unused to conserve Pi resources. A successful model test does not establish a production dependency or Jarvis deployment.
 
 ### Network and access
 

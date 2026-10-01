@@ -1,5 +1,20 @@
 # Storage and Backups
 
+## Pi storage and backups — October 1, 2026
+
+- Host root remains `/dev/mmcblk0p2` on microSD; firmware remains `/dev/mmcblk0p1`. The SSD is not the boot drive.
+- Entire Kingston SSD is one GPT/ext4 partition, `/dev/sda1`, label `PI_SSD`, UUID `48620556-fec8-4e07-9d7e-1f80a246e812`, mounted at `/mnt/pve/pi-ssd`.
+- Proxmox `pi-ssd`: directory storage limited to `pve-pi`, supports images/rootdir/ISO/templates/backups, `is_mountpoint=1`. This prevents storage activation on an unmounted directory on microSD.
+- VM 104 and 105 each have a 60 GB guest disk here. `pi-local` still points to `/var/lib/pve-pi-vm` on microSD; do not select it for new VM disks.
+- `local-lvm` is restricted to `pve-mini,pve-xps` because the Pi has no `pve/data` thin pool.
+- VM 104 backup: `dump/vzdump-qemu-104-2026_10_01-00_51_27.vma.zst`, about 8.1 GB; successful log and `zstd -t` confirmed. **Predates the LLM split** and contains the former all-three-service layout.
+- VM 105 backup: `dump/vzdump-qemu-105-2026_10_01-17_12_39.vma.zst`, 7.12 GB; snapshot completed with guest-agent freeze/thaw.
+- Original pre-migration backup retained at `/var/backups/pimox-20260930-174227`; off-Pi Windows copy was recorded during preparation.
+- Both VM archives currently reside on the same SSD as the guest disks. A fresh post-split VM 104 backup, off-device VM archive copies, schedules, and restore tests remain required.
+- Restore the old VM 104 archive on an isolated network: it includes the old Ollama copy and bot, so avoid duplicate bot activation or conflicting service addresses.
+
+See [PI_PROXMOX.md](PI_PROXMOX.md) for checks and recovery commands.
+
 ## Current mounts
 
 ### `xps-life`
@@ -85,7 +100,7 @@ Never overwrite a healthy live stack before inspecting:
 
 ## Backup plan
 
-- Old laptop runs Proxmox Backup Server.
+- Old laptop is designated for Proxmox Backup Server; verify current installation, datastore, and coverage before changing it.
 - Desired: weekly full-cluster backups through PBS.
 - Also keep recoverable application-level backups of Docker data and important native services.
 - Validate restores, not just backup job success.
@@ -113,8 +128,17 @@ Never overwrite a healthy live stack before inspecting:
 | Networking VM | 80 GB |
 | Pi-hole CT | 8 GB |
 | Uptime Kuma CT | 12 GB |
-| Raspberry Pi test VM | TBD |
+| Raspberry Pi test VM on mini (optional) | TBD |
 | **Total excluding test VM** | **826 GB** |
+
+### Pi (separate from mini allocation)
+
+| Workload | Guest disk | Storage |
+|---|---:|---|
+| VM 104 / `pi-automation` | 60 GB | `pi-ssd` |
+| VM 105 / `pi-llm` | 60 GB | `pi-ssd` |
+
+Local backups share this SSD; they are not an independent protected copy.
 
 ### XPS
 

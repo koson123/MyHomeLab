@@ -22,6 +22,16 @@
 
 Jellyfin currently has both explicit application directories and legacy Docker volumes mounted. Do not remove either until a deliberate migration confirms which data is authoritative.
 
+## Pi guest services — October 1, 2026
+
+| Service | Guest | Endpoint | Persistent data / state |
+|---|---|---|---|
+| n8n `2.36.9` | VM 104 `pi-automation` | `http://10.50.0.200:5678` | `/srv/automation/data/n8n`; running and user-tested |
+| Custom Discord bot | VM 104 `pi-automation` | Outbound bot connection | Preserved custom Docker image; Compose project `/srv/automation/compose/discord-bot`; running and user-tested |
+| Ollama `0.33.2` | VM 105 `pi-llm` | `http://10.50.0.119:11434` when started | `/srv/automation/data/ollama`; `qwen3:1.7b` inference verified, VM intentionally stopped |
+
+Compose projects retain `/srv/automation/compose/<project>` inside their respective guests. Ollama's old container, Compose directory, and model-data directory were removed from VM 104. No production LLM consumer is confirmed; check n8n credentials/workflows and bot configuration before declaring an integration migrated. Docker has been removed from the Pi host.
+
 ## Network/platform services
 
 | Service | Intended host | State |
@@ -41,7 +51,7 @@ Jellyfin currently has both explicit application directories and legacy Docker v
 | Mom Immich | `mini-mom` / VM 101 | Verified healthy; port 2283 |
 | Paperless-ngx | `mini-mom` / VM 101 | Verified healthy/running; port 8000 |
 | Mom inventory app | `mini-mom` / VM 101 | Not deployed: `/opt/mom/inventory` is empty (4 KiB), contains no app files, and no inventory container is running; locate/restore source or backup |
-| Gus/friend Immich | `mini-gus` | Dedicated VM not currently created |
+| Gus/friend Immich | `xps-life` | Separate Compose project verified at August audit, port 2284; dedicated `mini-gus` VM not created |
 
 Mom's services and storage should stay grouped so they can be moved later. Gus's Immich must remain separate from Mom's.
 
@@ -70,6 +80,6 @@ Mom's services and storage should stay grouped so they can be moved later. Gus's
 - Nextcloud
 - Octo-Fiesta music integration: planned Subsonic/OpenSubsonic proxy in front of Navidrome for local-first search/playback plus approved external-provider streaming/downloads; keep Navidrome read-only, give Octo-Fiesta only a dedicated writable import path, and do not rely on deprecated SquidWTF. See [OCTO_FIESTA.md](OCTO_FIESTA.md).
 - Homelab Jarvis core and proactive AI services in planned `mini-llm` VM; detailed plan in [JARVIS.md](JARVIS.md)
-- Local model runtime as a replaceable Jarvis component
+- Local model runtime: standalone Ollama guest now verified on the Pi and intentionally stopped; integration as a replaceable Jarvis component remains planned
 - Trusted local Gospel Content Library and search index sourced from official Church content
 - Gridfinity/testing services

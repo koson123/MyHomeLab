@@ -1,5 +1,10 @@
 # Homelab Jarvis and Proactive AI Plan
 
+## Current runtime boundary — October 1, 2026
+
+Standalone Ollama has been verified in Pi VM 105 `pi-llm` (`10.50.0.119:11434`, `qwen3:1.7b`) and is intentionally stopped when unused. n8n and the Discord bot run in VM 104 `pi-automation`. This establishes an available model runtime, not a deployed Jarvis core or confirmed production workflow dependency. The mini-PC Jarvis plan below remains planned. See [PI_PROXMOX.md](PI_PROXMOX.md).
+
+
 ## Status and purpose
 
 Status: Planned architecture; detailed planning started August 16, 2026.

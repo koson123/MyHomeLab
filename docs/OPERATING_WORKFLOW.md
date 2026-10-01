@@ -1,6 +1,6 @@
 # Homelab Operating Workflow
 
-Last updated: August 27, 2026
+Last updated: October 1, 2026 (targeted Pi migration update)
 
 ## Purpose
 
@@ -42,7 +42,7 @@ This is the next major homelab task before broad new expansion.
 ### 1. Physical and virtualization inventory
 
 - Verify every physical server, NAS, Raspberry Pi, network appliance, UPS-capable device, and other always-on node.
-- Verify both Proxmox hosts and any backup host.
+- Verify all three Proxmox hosts (`pve-mini`, `pve-xps`, `pve-pi`) and the backup host.
 - Enumerate every VM and LXC, including ID, name, host, CPU, RAM, virtual disk, network, IP, autostart setting, and purpose.
 - Identify abandoned, duplicate, stale, or undocumented guests.
 

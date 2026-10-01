@@ -13,7 +13,7 @@ Verified host facts (2026-08-06):
 - AMD Ryzen 7 8845HS, 8 cores / 16 threads
 - 28 GiB usable RAM
 - 1 TB NVMe; approximately 794 GB in `local-lvm`
-- Two-node Proxmox cluster, healthy and quorate
+- At the August audit: two-node cluster. Since September 30: three-node HomeLab cluster with `pve-pi`, verified quorate.
 
 Intended workloads:
 
@@ -38,10 +38,17 @@ Intended workloads:
 - 16 GB RAM
 - Dedicated Proxmox Backup Server (PBS)
 
-### Raspberry Pi 5
+### Raspberry Pi 5 / `pve-pi`
 
-- 8 GB RAM
-- Available for edge/network/testing projects
+- 8 GB RAM; Debian 13 ARM64 with the PXVIRT community Proxmox port
+- Static `10.50.0.114/24` on `vmbr0`; gateway `10.50.0.1`
+- HomeLab cluster member alongside `pve-mini` and `pve-xps`; three votes, quorum two
+- 4 KB kernel `6.18.39+rpt-rpi-v8`; `/dev/kvm` and ARM guest boot verified
+- OS and firmware remain on the 128 GB nominal microSD
+- Kingston 480 GB USB SSD (447.1 GiB reported), mounted at `/mnt/pve/pi-ssd` as Proxmox directory storage `pi-ssd`
+- VM 104 `pi-automation`: n8n and Discord bot; VM 105 `pi-llm`: tested Ollama, intentionally stopped
+- Host Docker and application data removed after migration; retain backups
+- See [PI_PROXMOX.md](PI_PROXMOX.md) for guest configuration and acceptance checks
 
 ### Storage
 
@@ -94,10 +101,10 @@ Preferred VM baseline:
 
 - Ubuntu 24.04 Server currently used, despite a general Debian preference
 - OVMF/UEFI
-- Q35 machine type
+- Q35 machine type for x86 guests; ARM Pi guests use their supported ARM machine configuration
 - QEMU guest agent
 - `discard=on` for SSD-backed virtual disks
-- Docker Compose projects stored under `/opt/<group>/<service>`
+- Docker Compose projects stored under `/opt/<group>/<service>` for existing XPS/mini stacks; migrated Pi guest stacks retain `/srv/automation/compose/<project>`
 - CIFS mounts for NAS storage
 
 Do not over-allocate RAM to game servers; the hosts have limited memory.
@@ -105,4 +112,4 @@ Do not over-allocate RAM to game servers; the hosts have limited memory.
 
 ## Jarvis deployment boundary
 
-The planned `mini-llm` VM hosts the modular homelab Jarvis services described in [JARVIS.md](JARVIS.md). Home Assistant remains on HAOS, large media remains on NAS storage, and Jarvis connects to other services through scoped APIs. The LLM is replaceable and does not receive unrestricted shell, Docker, Proxmox, Home Assistant, file, or credential access.
+The current `pi-llm` VM is a standalone Ollama runtime, intentionally stopped when unused; it does not implement the Jarvis orchestrator. The planned `mini-llm` VM hosts the modular homelab Jarvis services described in [JARVIS.md](JARVIS.md). Home Assistant remains on HAOS, large media remains on NAS storage, and Jarvis connects to other services through scoped APIs. The LLM is replaceable and does not receive unrestricted shell, Docker, Proxmox, Home Assistant, file, or credential access.

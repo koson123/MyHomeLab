@@ -1,10 +1,14 @@
 # Trevor's Automations Roadmap
 
-Last updated: August 31, 2026
+Last updated: October 1, 2026 (targeted platform update)
 
 ## Purpose
 
 Build a local-first automation layer connecting Trevor's homelab, Immich, Home Assistant, personal routines, media systems, and eventually Ecosystem OS. Automations should be reliable, private, auditable, and easy to override.
+
+## Current automation platform
+
+n8n and the Discord bot are migrated and user-tested in VM 104 `pi-automation` (`10.50.0.200`). Ollama is separate in VM 105 `pi-llm` (`10.50.0.119`), with inference verified but the VM intentionally stopped. No production workflow dependency on it is confirmed. Ansible is still pending; proposed placement is VM 104 so the Pi host stays focused on virtualization. Ansible can perform repeatable updates, but installing it alone does not enable automatic updates: inventory, playbooks, schedules, and verification are separate work.
 
 ## Core rules
 
@@ -158,7 +162,7 @@ Status: Later projects identified in existing plans.
 
 ### Ansible infrastructure as code
 
-Status: Later phase, after the core homelab is stable.
+Status: Pending, requested for the Pi when time permits; recommended control-node placement is `pi-automation` VM 104 after backup/addressing checks.
 
 - Centrally update Linux servers, Proxmox VMs/containers, and services.
 - Deploy software and Docker Compose stacks.
@@ -266,7 +270,7 @@ These are operational workflows to preserve and eventually manage from the same 
 
 - Immich phone uploads, media processing, and backup monitoring.
 - Paperless-ngx consume-folder import, OCR, and duplicate handling.
-- Sonarr/Radarr/Prowlarr/qBittorrent media workflow with qBittorrent forced through Gluetun and its kill switch.
+- Sonarr/Radarr/Prowlarr/qBittorrent media workflow currently uses direct qBittorrent networking. Gluetun and kill-switch enforcement remain postponed until Trevor chooses a paid provider.
 - Music and audiobook importing workflows through the planned media services.
 - Periodic Immich/NAS integrity and storage-capacity checks.
 

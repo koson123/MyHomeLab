@@ -1,6 +1,7 @@
 # Current State
 
-**Audit date:** August 17, 2026  
+**Latest targeted update:** October 1, 2026 (America/Denver)  
+**Last broad live audit:** August 17, 2026. Older subsystem entries below retain that evidence date; they are not a fresh whole-lab audit.  
 **Purpose:** One authoritative record of what is actually deployed, what is healthy, what differs from the plan, and what remains to build.
 
 ## Status legend
@@ -11,10 +12,27 @@
 - **Unknown:** Must be checked when access is available.
 - **Retired/legacy:** Preserved only for recovery or cleanup review.
 
+## Pi deployment — verified September 30–October 1, 2026
+
+The HomeLab cluster now has three quorate members: `pve-mini` (`10.50.0.2`), `pve-xps` (`10.50.0.10`), and `pve-pi` (`10.50.0.114`). The Pi runs the PXVIRT community ARM port. Its OS boots from microSD; the USB SSD holds guest disks and local backup archives.
+
+| Guest | Address | Services | Latest verified state |
+|---|---|---|---|
+| VM 104 / `pi-automation` | `10.50.0.200` | n8n (`:5678`), Discord bot | Running; user confirmed services work |
+| VM 105 / `pi-llm` | `10.50.0.119` | Ollama (`:11434`), `qwen3:1.7b` | Inference verified, then intentionally stopped to conserve RAM |
+
+Both guests are Debian 13 ARM64 with 60 GB disks on `pi-ssd`. Addresses were obtained through DHCP; reservations are not yet confirmed. Ollama connectivity from VM 104 to VM 105 was tested, but active production consumers and updated n8n credentials/workflows have not been confirmed. Keep the LLM stopped until a workload needs it; verify VM 105's autostart is disabled.
+
+Docker packages and original application directories have been removed from the Pi host. Services belong inside the guests. `pvestatd` was restarted and confirmed active after an early boot failure caused the node to show Unknown. Recurring PXVIRT `qm` warnings remain unresolved; a final host reboot with the completed setup has not been verified.
+
+Local SSD backups exist for both guests, but the VM 104 archive predates the LLM split. Create a fresh VM 104 backup, copy both guest backups off the Pi, and test isolated restores. A local archive on the same SSD as the VM disks does not protect against SSD failure.
+
+Detailed inventory, backup filenames, commands, and acceptance checks: [Pi Proxmox runbook](PI_PROXMOX.md).
+
 ## Immediate priorities
 
 1. **Protect Nova NAS data.** Nova is RAID 0; failure of either disk loses the entire 3.6 TB volume. RAID is not a backup, but RAID 0 also provides no drive-failure tolerance.
-2. **Deploy Proxmox Backup Server and scheduled jobs.** Neither Proxmox node currently has a backup job.
+2. **Verify PBS and scheduled jobs for all three cluster nodes.** The August audit found no scheduled jobs; the Pi now has one-time local VM backups, but off-device protection and current schedules remain unverified.
 3. **Create application-level backups.** Paperless, Actual, Mealie, NPM, Crafty/game worlds, ARR configs, and media-service configs lack confirmed current backups.
 4. **Copy the verified full Home Assistant backup off-VM before updating.** A 37.92 MB full local backup now exists; HA's repair warning had not yet refreshed immediately after creation.
 5. **Assign stable DHCP reservations/static addresses** to infrastructure guests and both NAS devices.
@@ -60,13 +78,13 @@
 
 ## Proxmox Backup Server laptop
 
-**Status:** Planned; not installed or connected
+**Status:** Not installed or connected at the August audit; current deployment needs verification
 
 Remaining work:
 
 - Install PBS on the laptop.
 - Create and validate a datastore.
-- Connect both Proxmox nodes.
+- Connect all three Proxmox nodes, verifying ARM guest backup/restore support.
 - Schedule VM/LXC backups.
 - Define retention/pruning and verification jobs.
 - Run and document restore tests.
@@ -461,7 +479,7 @@ Review later:
 
 ## Not adequate/current
 
-- No PBS installation.
+- No PBS installation at the August audit; verify the laptop's current state before installing or overwriting anything.
 - No scheduled Proxmox backup jobs.
 - No Proxmox replication jobs.
 - No independent backup of NAS-mounted media/photos/documents was verified.
@@ -503,7 +521,7 @@ Do not delete legacy backups until current replacement backups exist and restore
 
 ## Hosted infrastructure not deployed
 
-- Proxmox Backup Server laptop
+- Proxmox Backup Server laptop coverage — current installation needs verification
 - Cluster backup schedules, prune/verify jobs, and restore testing
 - General secure remote-access VPN/mesh solution
 - Gluetun on ARR stack
@@ -592,7 +610,7 @@ Core design rules:
 ## Phase B — Establish recoverability
 
 1. Deploy PBS laptop.
-2. Back up all ten Proxmox guests on a schedule.
+2. Enumerate the current guests across all three nodes and back them up on a schedule; do not reuse the August count of ten.
 3. Add prune, verify, and alert jobs.
 4. Add app-level backups for Paperless, Actual, Mealie, NPM, ARR, media configs, Crafty, and Kuma.
 5. Export OPNsense configuration off-VM.
@@ -616,7 +634,7 @@ Core design rules:
 3. Choose and deploy only the Life apps Trevor still wants: LibreCloset, Vaultwarden, workout, Price Ghost, nutrition tracker.
 4. Create Heavy/Future Apps VM only when Frigate/WorkAdventure/Nextcloud work is ready.
 5. Create Random/Test VM when a sandbox is needed.
-6. Create Local AI helper only when a real workload justifies its resources.
+6. Use the verified, currently stopped Pi LLM guest only when a real workload justifies its resources. The planned mini-PC Jarvis services remain a separate future project.
 7. Decide whether Gus should remain on `xps-life` or move to a dedicated guest.
 
 ## Phase E — Automation and Jarvis foundation
@@ -643,5 +661,5 @@ Core design rules:
 - Whether public services have MFA, strong unique credentials, and rate limiting where supported
 - Which Life apps remain desired versus merely historical ideas
 - Physical switch/AP/router/mesh inventory and UPS/power topology
-- Raspberry Pi 5 and old laptop/device current roles
+- Pi final reboot recovery, VM 105 autostart policy, and old laptop/PBS current role
 

@@ -1,5 +1,9 @@
 # Runbook
 
+## Pi operations
+
+See [PI_PROXMOX.md](PI_PROXMOX.md). The Pi host has no Docker now; run application Docker commands inside VM 104 or VM 105. VM 105 is intentionally stopped when unused. Check storage mounts before starting guests and distinguish this planned shutdown from an outage.
+
 ## Proxmox inventory check
 
 Run on each Proxmox node before changing VM allocations:
